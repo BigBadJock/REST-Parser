@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Projects\\Rest-Parser\\Dev\\Source\\REST-Parser\\REST-Parser\\REST-Parser.csproj": {}
+    "C:\\GitHub\\REST-Parser\\REST-Parser\\REST-Parser\\REST-Parser.csproj": {}
   },
   "projects": {
-    "F:\\Projects\\Rest-Parser\\Dev\\Source\\REST-Parser\\REST-Parser\\REST-Parser.csproj": {
+    "C:\\GitHub\\REST-Parser\\REST-Parser\\REST-Parser\\REST-Parser.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Projects\\Rest-Parser\\Dev\\Source\\REST-Parser\\REST-Parser\\REST-Parser.csproj",
+        "projectUniqueName": "C:\\GitHub\\REST-Parser\\REST-Parser\\REST-Parser\\REST-Parser.csproj",
         "projectName": "REST-Parser",
-        "projectPath": "F:\\Projects\\Rest-Parser\\Dev\\Source\\REST-Parser\\REST-Parser\\REST-Parser.csproj",
+        "projectPath": "C:\\GitHub\\REST-Parser\\REST-Parser\\REST-Parser\\REST-Parser.csproj",
         "packagesPath": "C:\\Users\\John\\.nuget\\packages\\",
-        "outputPath": "F:\\Projects\\Rest-Parser\\Dev\\Source\\REST-Parser\\REST-Parser\\obj\\",
+        "outputPath": "C:\\GitHub\\REST-Parser\\REST-Parser\\REST-Parser\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
