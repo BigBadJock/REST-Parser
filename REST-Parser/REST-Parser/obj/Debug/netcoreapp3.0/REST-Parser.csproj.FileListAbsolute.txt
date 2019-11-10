@@ -1,8 +1,0 @@
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\bin\Debug\netcoreapp3.0\REST-Parser.deps.json
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\bin\Debug\netcoreapp3.0\REST-Parser.dll
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\bin\Debug\netcoreapp3.0\REST-Parser.pdb
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp3.0\REST-Parser.csprojAssemblyReference.cache
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp3.0\REST-Parser.AssemblyInfoInputs.cache
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp3.0\REST-Parser.AssemblyInfo.cs
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp3.0\REST-Parser.dll
-F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp3.0\REST-Parser.pdb
