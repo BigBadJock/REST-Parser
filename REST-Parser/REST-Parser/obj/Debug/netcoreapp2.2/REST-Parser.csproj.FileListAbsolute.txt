@@ -1,0 +1,7 @@
+F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\bin\Debug\netcoreapp2.2\REST-Parser.deps.json
+F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\bin\Debug\netcoreapp2.2\REST-Parser.dll
+F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\bin\Debug\netcoreapp2.2\REST-Parser.pdb
+F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp2.2\REST-Parser.AssemblyInfoInputs.cache
+F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp2.2\REST-Parser.AssemblyInfo.cs
+F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp2.2\REST-Parser.dll
+F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser\obj\Debug\netcoreapp2.2\REST-Parser.pdb

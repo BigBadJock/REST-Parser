@@ -1,0 +1,104 @@
+﻿2019-11-10T01:05:43.3461956+00:00;VSTestExecutionThread;Info;SpecFlow+Runner execution started
+2019-11-10T01:05:43.3462909+00:00;VSTestExecutionThread;Info;SpecFlow+Runner 3.0.391 in Framework netcore22 in x64 mode execution started
+2019-11-10T01:05:43.3462946+00:00;VSTestExecutionThread;Info;TestAdapter Location: F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2\TechTalk.SpecRun.VisualStudio.TestAdapter.dll
+2019-11-10T01:05:43.4554855+00:00;VSTestExecutionThread;Info;SpecRun: running tests in F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2\REST-Parser.specs.dll
+2019-11-10T01:05:43.4557069+00:00;VSTestExecutionThread;Info;Output folder configured to "F:\Projects\Rest-Parser\Dev\Source\REST-Parser\TestResults" (default)
+2019-11-10T01:05:43.4557504+00:00;VSTestExecutionThread;Info;Profile: REST-Parser.specs
+2019-11-10T01:05:43.4946438+00:00;VSTestExecutionThread;Info;Log file path: F:\Projects\Rest-Parser\Dev\Source\REST-Parser\TestResults\REST-Parser.specs_REST-Parser.specs_2019-11-10T010543.log
+2019-11-10T01:05:43.5031677+00:00;VSTestExecutionThread;Info;SpecFlow+Runner Evaluation Mode: Please purchase at http://www.specflow.org/plus to remove test execution delay.
+2019-11-10T01:05:43.5115431+00:00;Thread#12;Info;Checking license
+2019-11-10T01:05:43.5305012+00:00;Thread#12;Info;Evaluation mode: test execution starts in 6 seconds... (this delay is removed in the registered version)
+2019-11-10T01:05:49.5310906+00:00;Thread#12;Info;Evaluation delay finished.
+2019-11-10T01:05:49.5426382+00:00;Thread#12;Info;License check completed
+2019-11-10T01:05:49.5428047+00:00;Thread#12;Info;starting test run
+2019-11-10T01:05:49.5575952+00:00;Thread#12;Info;Discovering target: Default
+2019-11-10T01:05:49.5578571+00:00;Thread#12;Info;Discovering tests from assembly: F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2\REST-Parser.specs.dll
+2019-11-10T01:05:49.6648152+00:00;Thread#12;Info;Discovered tests from assembly: F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2\REST-Parser.specs.dll
+2019-11-10T01:05:49.6661800+00:00:Test Suite Dump
+2019-11-10T01:05:49.6682192+00:00:#0: REST-Parser.specs/REST-Parser.specs - 
+2019-11-10T01:05:49.6682410+00:00:#1: Default - 
+2019-11-10T01:05:49.6682436+00:00:#2: REST-Parser.specs - 
+2019-11-10T01:05:49.6682455+00:00:#3: Calculator - 
+2019-11-10T01:05:49.6682870+00:00:#4: Add two numbers - TestAssembly:REST-Parser.specs/Feature:Calculator/Scenario:Add+two+numbers
+2019-11-10T01:05:49.6683434+00:00:End: Test Suite Dump
+2019-11-10T01:05:49.6878955+00:00:Thread#0:Scheduler: get next test for thread 0
+2019-11-10T01:05:49.6901190+00:00:Thread#:Scheduler: testitem #4 from normal test queue 
+2019-11-10T01:05:49.6901895+00:00:Thread#0:Scheduler: considering testitem #4 for thread 0
+2019-11-10T01:05:49.6936899+00:00:Thread#0:TestItem#4:testItemMatchesCurrentTestThread:UnSpecific
+2019-11-10T01:05:49.6937056+00:00:Thread#0:TestItem#4:runsOnOneOtherThreadSpecific:False
+2019-11-10T01:05:49.6937115+00:00:Thread#0:TestItem#4:runsOnOneOtherThreadUnspecific:False
+2019-11-10T01:05:49.6937160+00:00:Thread#0:Scheduler: using testitem #4 for thread 0
+2019-11-10T01:05:49.6950615+00:00:Thread#0:Scheduler: Test #4 is scheduled for thread
+2019-11-10T01:05:49.6960932+00:00:Thread#0:Scheduler: with testItemExecutionIndex 0
+2019-11-10T01:05:49.6993620+00:00:Thread #0: creating new test thread executor for REST-Parser.specs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null (target: Default)
+2019-11-10T01:05:49.7020941+00:00:Thread #0: Creating test assembly executor for execution model OutProc
+2019-11-10T01:05:49.7027518+00:00:Thread #0: Creating test assembly executor for execution model OutProc
+2019-11-10T01:05:49.7040881+00:00:Thread #0: using TechTalk.SpecRun.Framework.Execution.OutOfProc.StreamJsonRPC.OutOfProcessTestAssemblyExecutorHost to execute tests
+2019-11-10T01:05:49.7442113+00:00:Assembly resolving Microsoft.VisualStudio.Validation, Version=15.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+2019-11-10T01:05:49.8403624+00:00:starting Out Of Process Executor
+2019-11-10T01:05:49.9824012+00:00:Executing test executor at 'C:\Program Files\dotnet\dotnet.exe' '"F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2\SpecFlowPlusRunner\netcoreapp2.2\TechTalk.SpecRun.Framework.Executor.anycpu.netcoreapp2_2.dll" 24224 2019-11-10T010543 "F:\Projects\Rest-Parser\Dev\Source\REST-Parser\TestResults"' in 'F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2'
+2019-11-10T01:05:50.0006591+00:00:Entering Memory Barrier for 6332
+2019-11-10T01:05:50.0006790+00:00:Leaving Memory Barrier for 6332
+2019-11-10T01:05:50.0052736+00:00:Out of Process Executor 6332 started
+2019-11-10T01:05:50.0337708+00:00:Waiting for endpoint
+2019-11-10T01:05:50.0353382+00:00:trying to connect to Out of Process Executor the 1 attempt
+2019-11-10T01:05:50.3008341+00:00:waiting for Connection of SpecRun.Executor.6332.Logger ended
+2019-11-10T01:05:50.3034169+00:00:Assembly resolving StreamJsonRpc.resources, Version=1.4.0.0, Culture=en-GB, PublicKeyToken=b03f5f7f11d50a3a
+2019-11-10T01:05:50.3042608+00:00:Assembly resolving StreamJsonRpc.resources, Version=1.4.0.0, Culture=en, PublicKeyToken=b03f5f7f11d50a3a
+2019-11-10T01:05:50.3049445+00:00:Assembly resolving Microsoft.VisualStudio.Threading, Version=15.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+2019-11-10T01:05:50.3584463+00:00:Connection to Out of Process Executor established in the 1 attempt
+2019-11-10T01:05:50.6562370+00:00:waiting for Connection of SpecRun.Executor.6332.Callback ended
+2019-11-10T01:05:50.8372749+00:00:2019-11-10T01:05:50.7463735+00:00:OutOfProcessTestAssemblyExecutor: initialized for F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2\REST-Parser.specs.dll on test thread #0
+2019-11-10T01:05:50.8505490+00:00:Endpoint 6332 started
+2019-11-10T01:05:50.8702027+00:00:2019-11-10T01:05:50.8697398+00:00:OutOfProcessTestAssemblyExecutor: running tests...
+2019-11-10T01:05:50.9912088+00:00:Thread#0: Test #4/0 is started on thread #0
+2019-11-10T01:05:51.0009462+00:00:2019-11-10T01:05:51.0006494+00:00:Thread#0:T:2019-11-10T01:05:50.9986812+00:00:Assembly resolving TechTalk.SpecFlow, Version=3.0.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41
+2019-11-10T01:05:51.1667590+00:00:2019-11-10T01:05:51.1663543+00:00:Thread#0:T:-> Loading plugin F:\Projects\Rest-Parser\Dev\Source\REST-Parser\REST-Parser.specs\bin\Debug\netcoreapp2.2\SpecRun.Runtime.SpecFlowPlugin.dll
+2019-11-10T01:05:51.1838567+00:00:2019-11-10T01:05:51.1834044+00:00:Thread#0:T:2019-11-10T01:05:51.1831968+00:00:Assembly resolving TechTalk.SpecFlow, Version=3.0.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41
+2019-11-10T01:05:51.1886295+00:00:2019-11-10T01:05:51.1883495+00:00:Thread#0:T:-> Using default config
+2019-11-10T01:05:51.1996978+00:00:2019-11-10T01:05:51.1993861+00:00:Thread#0:T:2019-11-10T01:05:51.1992205+00:00:Assembly resolving Microsoft.VisualStudio.TestPlatform.ObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+2019-11-10T01:05:51.2385021+00:00:2019-11-10T01:05:51.2381531+00:00:Thread#0:B:Given I have entered 50 into the calculator
+2019-11-10T01:05:51.3766097+00:00:2019-11-10T01:05:51.3753390+00:00:Thread#0:T:pending: CalculatorSteps.GivenIHaveEnteredIntoTheCalculator(50)
+2019-11-10T01:05:51.3794012+00:00:2019-11-10T01:05:51.3791877+00:00:Thread#0:B:And I have also entered 70 into the calculator
+2019-11-10T01:05:51.3800170+00:00:2019-11-10T01:05:51.3798358+00:00:Thread#0:T:skipped because of previous errors
+2019-11-10T01:05:51.3806825+00:00:2019-11-10T01:05:51.3805164+00:00:Thread#0:B:When I press add
+2019-11-10T01:05:51.3811581+00:00:2019-11-10T01:05:51.3809430+00:00:Thread#0:T:skipped because of previous errors
+2019-11-10T01:05:51.3817973+00:00:2019-11-10T01:05:51.3816628+00:00:Thread#0:B:Then the result should be 120 on the screen
+2019-11-10T01:05:51.3821378+00:00:2019-11-10T01:05:51.3819828+00:00:Thread#0:T:skipped because of previous errors
+2019-11-10T01:05:51.3867849+00:00:2019-11-10T01:05:51.3864516+00:00:Thread#0:T:Pending: One or more step definitions are not implemented yet.
+2019-11-10T01:05:51.3871519+00:00:2019-11-10T01:05:51.3869409+00:00:Thread#0:T:  CalculatorSteps.GivenIHaveEnteredIntoTheCalculator(50)
+2019-11-10T01:05:51.3948883+00:00:Thread#0:Scheduler: get next test for thread 0
+2019-11-10T01:05:51.3949130+00:00:Thread#:Scheduler: at the end of normal test queue
+2019-11-10T01:05:51.3949159+00:00:Thread#0:Scheduler: enumerator for thread is at end
+2019-11-10T01:05:51.3949186+00:00:Thread#0:Scheduler: No more tests for thread
+2019-11-10T01:05:51.4307204+00:00:Thread#0: Test #4/0 is finished on thread #0 as Pending within 0.43861 seconds
+2019-11-10T01:05:51.4423817+00:00:RPC Client disconnected, because 'Disposed'. 
+LastMessage: 
+Description:Stream has been disposed
+Exception:<none>
+2019-11-10T01:05:51.4492738+00:00:Assembly resolving System.Diagnostics.Process.resources, Version=4.2.1.0, Culture=en-GB, PublicKeyToken=b03f5f7f11d50a3a
+2019-11-10T01:05:51.4496844+00:00:Assembly resolving System.Diagnostics.Process.resources, Version=4.2.1.0, Culture=en, PublicKeyToken=b03f5f7f11d50a3a
+2019-11-10T01:05:51.4664326+00:00:Unable to stop executor process: System.InvalidOperationException: No process is associated with this object.
+   at System.Diagnostics.Process.EnsureState(State state)
+   at System.Diagnostics.Process.get_HasExited()
+   at TechTalk.SpecRun.Framework.Execution.OutOfProc.OutProcExecutorManager.StopExecutorProcess(Process executorProcess)
+2019-11-10T01:05:51.4741213+00:00:Thread#-1:Scheduler: get next test for thread -1
+2019-11-10T01:05:51.4741331+00:00:Thread#:Scheduler: at the end of normal test queue
+2019-11-10T01:05:51.4741356+00:00:Thread#-1:Scheduler: enumerator for thread is at end
+2019-11-10T01:05:51.4762298+00:00;Thread#12;Info;test run finished
+2019-11-10T01:05:51.4764042+00:00;Thread#12;Info;publishing test results
+2019-11-10T01:05:51.4766115+00:00;Thread#12;Info;Not publishing results.
+2019-11-10T01:05:51.4766873+00:00;Thread#12;Info;test results published
+2019-11-10T01:05:51.4767453+00:00;Thread#12;Info;generating reports
+2019-11-10T01:05:51.5459085+00:00;Thread#12;Info;Starting external report generation process
+2019-11-10T01:05:53.2528033+00:00;Thread#12;Info;Successfully generated reports.
+2019-11-10T01:05:53.2546573+00:00;Thread#12;Info;Successfully generated reports
+2019-11-10T01:05:53.2624228+00:00:Total: 1
+2019-11-10T01:05:53.2648882+00:00:Succeeded: 0
+2019-11-10T01:05:53.2655557+00:00:Ignored: 0
+2019-11-10T01:05:53.2660973+00:00:Pending: 1
+2019-11-10T01:05:53.2661050+00:00:Skipped: 0
+2019-11-10T01:05:53.2667013+00:00:Failed: 0
+2019-11-10T01:05:53.2760724+00:00;VSTestExecutionThread;Info;Adding attachments to VSTest
+2019-11-10T01:05:53.2761220+00:00;VSTestExecutionThread;Info;adding Test Execution Report 'F:\Projects\Rest-Parser\Dev\Source\REST-Parser\TestResults\REST-Parser.specs_REST-Parser.specs_2019-11-10T010543.html'
+========== End of log file ==========

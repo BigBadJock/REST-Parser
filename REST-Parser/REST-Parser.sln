@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29418.71
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "REST-Parser", "REST-Parser\REST-Parser.csproj", "{CA66D177-83EC-491D-B98D-D5F428129F30}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "REST-Parser.specs", "REST-Parser.specs\REST-Parser.specs.csproj", "{91B3F8D7-11F8-4263-9B30-421344733304}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA66D177-83EC-491D-B98D-D5F428129F30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA66D177-83EC-491D-B98D-D5F428129F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA66D177-83EC-491D-B98D-D5F428129F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA66D177-83EC-491D-B98D-D5F428129F30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91B3F8D7-11F8-4263-9B30-421344733304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91B3F8D7-11F8-4263-9B30-421344733304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91B3F8D7-11F8-4263-9B30-421344733304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91B3F8D7-11F8-4263-9B30-421344733304}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D86E0345-7E89-41B9-A8BF-D50754A91AE6}
+	EndGlobalSection
+EndGlobal
