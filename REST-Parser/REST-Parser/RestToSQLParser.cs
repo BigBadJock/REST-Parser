@@ -31,22 +31,13 @@ namespace REST_Parser
             // surname[eq] = McArthur
             GetCondition(condition, out string field, out string restOperator, out string value);
 
-            string sqlOp = GetOperator(restOperator);
+            string sqlOp = GetSqlOperator(restOperator);
             string sql = string.Empty;
 
             sql = $"{field}{sqlOp}{value}";
 
             return sql;
         }
-
-
-        protected internal static string GetOperator(string restOperator)
-        {
-            string op = ExtractOperator(restOperator);
-            string sqlOp = GetSqlOperator(op);
-            return sqlOp;
-        }
-
 
         private static string GetSqlOperator(string op)
         {
