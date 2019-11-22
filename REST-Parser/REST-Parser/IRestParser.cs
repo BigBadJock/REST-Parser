@@ -8,6 +8,6 @@ namespace REST_Parser
 {
     public interface IRestParser<T>
     {
-        Object Parse(string request); 
+        T Parse(string request); 
     }
 }

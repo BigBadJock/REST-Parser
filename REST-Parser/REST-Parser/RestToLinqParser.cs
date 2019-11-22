@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace REST_Parser
 {
-    public class RestToLinqParser<T>  : BaseParser, IRestParser<List<Expression<Func<T, bool>>>>
+    public class RestToLinqParser<DataClassType>: BaseParser<List<Expression<Func<DataClassType, bool>>>>, IRestParser<List<Expression<Func<DataClassType, bool>>>>
     {
-        List<Expression<Func<T, bool>>> expressions = new List<Expression<Func<T, bool>>>();
+        List<Expression<Func<DataClassType, bool>>> expressions = new List<Expression<Func<DataClassType, bool>>>();
 
-        public override Object Parse(string request)
+        public override List<Expression<Func<DataClassType, bool>>> Parse(string request)
         {
-            List<Expression<Func<T, bool>>> linqConditions = new List<Expression<Func<T, bool>>>();
+            List<Expression<Func<DataClassType, bool>>> linqConditions = new List<Expression<Func<DataClassType, bool>>>();
             string[] conditions = GetConditions(request);
             foreach(string condition in conditions)
             {
@@ -22,16 +22,16 @@ namespace REST_Parser
             return linqConditions;
         }
 
-        private Expression<Func<T, bool>> parseCondition(string condition)
+        private Expression<Func<DataClassType, bool>> parseCondition(string condition)
         {
             // surname[eq] = McArthur
 
-            var parameter = Expression.Parameter(typeof(T), "p");
+            var parameter = Expression.Parameter(typeof(DataClassType), "p");
             GetCondition(condition, out string field, out string restOperator, out string value);
             switch (restOperator)
             {
                 case "eq":
-                    return Expression.Lambda<Func<T, bool>>(
+                    return Expression.Lambda<Func<DataClassType, bool>>(
                         Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(value)),
                         parameter);
                 default:
@@ -39,14 +39,24 @@ namespace REST_Parser
             }
 
             return null;
+        }
 
-
-            //List<Expression<Func<EventRuleViewDTO, bool>>> expressions = new List<Expression<Func<EventRuleViewDTO, bool>>>();
-            //if (parameters.EventTypeId > 0) expressions.Add(a => a.EventTypeId == parameters.EventTypeId);
-            //if (parameters.NotificationTypeId > 0) expressions.Add(a => a.NotificationTypeId == parameters.NotificationTypeId);
-            //if (parameters.Active.HasValue) expressions.Add(a => a.Active == parameters.Active);
-            //queryable = viewRepository.GetMany(expressions, pagination);
-
+        protected override internal string GetValue(string value)
+        {
+            string sqlValue;
+            if (int.TryParse(value, out _))
+            {
+                sqlValue = value;
+            }
+            if (double.TryParse(value, out double d))
+            {
+                sqlValue = value;
+            }
+            else
+            {
+                sqlValue = value;
+            }
+            return sqlValue;
         }
 
     }

@@ -4,13 +4,13 @@ using System.Text;
 
 namespace REST_Parser
 {
-    public class RestToSQLParser : BaseParser, IRestParser<string>
+    public class RestToSQLParser: BaseParser<string>, IRestParser<string>
     {
         public RestToSQLParser()
         {
         }
 
-        public override Object Parse(string request)
+        public override string Parse(string request)
         {
             List<string> sqlConditions = new List<string>();
             string[] conditions = GetConditions(request);
@@ -26,7 +26,7 @@ namespace REST_Parser
             return sb.ToString();
         }
 
-       private static string parseCondition(string condition)
+       private string parseCondition(string condition)
         {
             // surname[eq] = McArthur
             GetCondition(condition, out string field, out string restOperator, out string value);
@@ -39,7 +39,7 @@ namespace REST_Parser
             return sql;
         }
 
-        private static string GetSqlOperator(string op)
+        private string GetSqlOperator(string op)
         {
             string sqlOp = "";
             switch (op)

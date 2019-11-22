@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace REST_Parser
 {
-    public abstract class BaseParser : IRestParser<Object>
+    public abstract class BaseParser<T> : IRestParser<T>
     {
-        public abstract Object Parse(string request);
+        public abstract T Parse(string request);
 
-        protected internal static string[] GetConditions(string request)
+        protected internal  string[] GetConditions(string request)
         {
             string[] conditions;
             conditions = request.Split('&');
@@ -18,7 +18,7 @@ namespace REST_Parser
         }
 
 
-        protected internal static string ExtractOperator(string query)
+        protected internal  string ExtractOperator(string query)
         {
             int start = query.IndexOf("[") + 1;
             int end = query.IndexOf("]");
@@ -27,7 +27,7 @@ namespace REST_Parser
             return op;
         }
 
-        protected internal static void GetCondition(string condition, out string field, out string restOperator, out string value)
+        protected internal  void GetCondition(string condition, out string field, out string restOperator, out string value)
         {
             string[] sides = condition.Split('=');
             field = sides[0].Substring(0, sides[0].IndexOf("["));
@@ -35,7 +35,7 @@ namespace REST_Parser
             value = GetValue(sides[1]);
         }
 
-        protected internal static string GetValue(string value)
+        protected virtual internal string GetValue(string value)
         {
             string sqlValue;
             if (int.TryParse(value, out _))
