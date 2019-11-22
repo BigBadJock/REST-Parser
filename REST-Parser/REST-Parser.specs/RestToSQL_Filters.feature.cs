@@ -18,14 +18,14 @@ namespace REST_Parser.specs
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
-    public partial class FilterFeature
+    public partial class RestToSQL_FiltersFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Microsoft.VisualStudio.TestTools.UnitTesting.TestContext _testContext;
         
-#line 1 "Filters.feature"
+#line 1 "RestToSQL_Filters.feature"
 #line hidden
         
         public virtual Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
@@ -44,7 +44,7 @@ namespace REST_Parser.specs
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Filter", "\tIn order to generate a sql query for an API request containing an equals filter\r" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "RestToSQL_Filters", "\tIn order to generate a sql query for an API request containing an equals filter\r" +
                     "\n\tAs a parse\r\n\tI want to be able to parse the filter", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -60,9 +60,9 @@ namespace REST_Parser.specs
         public virtual void TestInitialize()
         {
             if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Title != "Filter")))
+                        && (testRunner.FeatureContext.FeatureInfo.Title != "RestToSQL_Filters")))
             {
-                global::REST_Parser.specs.FilterFeature.FeatureSetup(null);
+                global::REST_Parser.specs.RestToSQL_FiltersFeature.FeatureSetup(null);
             }
         }
         
@@ -112,7 +112,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add equals filter to surname: surname[eq]=McArthur")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "surname[eq]=McArthur")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "surname[eq]=McArthur")]
@@ -126,7 +126,7 @@ this.AddEqualsFilterToSurname("surname[eq]=McArthur", "surname = \'McArthur\'", 
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add equals filter to surname: surname[eq]=Smith")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "surname[eq]=Smith")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "surname[eq]=Smith")]
@@ -162,7 +162,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add equals filter to firstname: firstname[eq]=John")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "firstname[eq]=John")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "firstname[eq]=John")]
@@ -176,7 +176,7 @@ this.AddEqualsFilterToFirstname("firstname[eq]=John", "firstname = \'John\'", ((
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add equals filter to firstname: firstname[eq]=James")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "firstname[eq]=James")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "firstname[eq]=James")]
@@ -212,7 +212,7 @@ this.ScenarioInitialize(scenarioInfo);
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add equals filter to price: price[eq]=55")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "price[eq]=55")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "price[eq]=55")]
@@ -226,7 +226,7 @@ this.AddEqualsFilterToPrice("price[eq]=55", "price = 55", ((string[])(null)));
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add equals filter to price: price[eq]=55.25")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "price[eq]=55.25")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "price[eq]=55.25")]
@@ -235,6 +235,106 @@ this.AddEqualsFilterToPrice("price[eq]=55", "price = 55", ((string[])(null)));
         {
 #line 28
 this.AddEqualsFilterToPrice("price[eq]=55.25", "price = 55.25", ((string[])(null)));
+#line hidden
+        }
+        
+        public virtual void AddNotEqualsFilterToSurname(string request, string expectedSQL, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "filter"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add not equals filter to surname", null, @__tags);
+#line 39
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 40
+ testRunner.Given(string.Format("I have received a {0} request", request), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 41
+ testRunner.When("I parse it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 42
+ testRunner.Then(string.Format("the result should be a sql query {0}", expectedSQL), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add not equals filter to surname: surname[ne]=McArthur")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "surname[ne]=McArthur")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "surname[ne]=McArthur")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:expectedSQL", "surname <> \'McArthur\'")]
+        public virtual void AddNotEqualsFilterToSurname_SurnameNeMcArthur()
+        {
+#line 39
+this.AddNotEqualsFilterToSurname("surname[ne]=McArthur", "surname <> \'McArthur\'", ((string[])(null)));
+#line hidden
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add not equals filter to surname: surname[ne]=Smith")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "surname[ne]=Smith")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "surname[ne]=Smith")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:expectedSQL", "surname <> \'Smith\'")]
+        public virtual void AddNotEqualsFilterToSurname_SurnameNeSmith()
+        {
+#line 39
+this.AddNotEqualsFilterToSurname("surname[ne]=Smith", "surname <> \'Smith\'", ((string[])(null)));
+#line hidden
+        }
+        
+        public virtual void AddNotEqualsFilterToPrice(string request, string expectedSQL, string[] exampleTags)
+        {
+            string[] @__tags = new string[] {
+                    "filter"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add not equals filter to price", null, @__tags);
+#line 49
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 50
+ testRunner.Given(string.Format("I have received a {0} request", request), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 51
+ testRunner.When("I parse it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 52
+ testRunner.Then(string.Format("the result should be a sql query {0}", expectedSQL), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add not equals filter to price: price[ne]=55")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "price[ne]=55")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "price[ne]=55")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:expectedSQL", "price <> 55")]
+        public virtual void AddNotEqualsFilterToPrice_PriceNe55()
+        {
+#line 49
+this.AddNotEqualsFilterToPrice("price[ne]=55", "price <> 55", ((string[])(null)));
+#line hidden
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Add not equals filter to price: price[ne]=55.25")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "RestToSQL_Filters")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("VariantName", "price[ne]=55.25")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:request", "price[ne]=55.25")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("Parameter:expectedSQL", "price <> 55.25")]
+        public virtual void AddNotEqualsFilterToPrice_PriceNe55_25()
+        {
+#line 49
+this.AddNotEqualsFilterToPrice("price[ne]=55.25", "price <> 55.25", ((string[])(null)));
 #line hidden
         }
     }

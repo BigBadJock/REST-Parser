@@ -6,8 +6,9 @@ using TechTalk.SpecFlow.Assist;
 namespace REST_Parser.specs
 {
     [Binding]
-    public class FilterSteps
+    public class RestToSQL_FiltersSteps
     {
+        RestToSQLParser parser = new RestToSQLParser();
         string request;
         string result;
  
@@ -21,7 +22,7 @@ namespace REST_Parser.specs
         [When(@"I parse it")]
         public void WhenIParseIt()
         {
-            this.result = RestParser.Parse(this.request);
+            this.result = (string)parser.Parse(this.request);
         }
 
         [Then(@"the result should be a sql query (.*)")]

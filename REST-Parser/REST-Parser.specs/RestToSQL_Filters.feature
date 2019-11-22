@@ -1,4 +1,4 @@
-﻿Feature: Filter
+﻿Feature: RestToSQL_Filters
 	In order to generate a sql query for an API request containing an equals filter
 	As a parse
 	I want to be able to parse the filter
@@ -35,3 +35,22 @@ Scenario Outline: Add equals filter to price
 	| price[eq]=55.25	| price = 55.25 |
 
 
+@filter
+Scenario Outline: Add not equals filter to surname 
+	Given I have received a <request> request 
+	When I parse it
+	Then the result should be a sql query <expectedSQL>
+	Examples:
+	| request              | expectedSQL           |
+	| surname[ne]=McArthur | surname <> 'McArthur' |
+	| surname[ne]=Smith    | surname <> 'Smith'    |
+
+@filter
+Scenario Outline: Add not equals filter to price 
+	Given I have received a <request> request 
+	When I parse it
+	Then the result should be a sql query <expectedSQL>
+	Examples:
+	| request			| expectedSQL		|
+	| price[ne]=55		| price <> 55		|
+	| price[ne]=55.25	| price <> 55.25    |
