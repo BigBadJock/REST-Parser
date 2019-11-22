@@ -1,2 +1,2 @@
 # REST-Parser
-A C# Parser for REST requests
+A C# Parser for REST requests using SpecFlow for tests
