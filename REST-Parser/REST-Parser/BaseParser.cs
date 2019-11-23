@@ -23,16 +23,16 @@ namespace REST_Parser
             int start = query.IndexOf("[") + 1;
             int end = query.IndexOf("]");
             int length = end - start;
-            string op = query.Substring(start, length);
+            string op = query.Substring(start, length).Trim();
             return op;
         }
 
         protected internal  void GetCondition(string condition, out string field, out string restOperator, out string value)
         {
             string[] sides = condition.Split('=');
-            field = sides[0].Substring(0, sides[0].IndexOf("["));
+            field = (sides[0].Substring(0, sides[0].IndexOf("["))).Trim();
             restOperator = ExtractOperator(sides[0]);
-            value = GetValue(sides[1]);
+            value = GetValue(sides[1]).Trim();
         }
 
         protected virtual internal string GetValue(string value)

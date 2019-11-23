@@ -28,11 +28,12 @@ namespace RestParserTests
         [DataTestMethod]
         [DataRow("surname[eq]=Roberts", "Roberts")]
         [DataRow("surname[eq]=Smith", "Smith")]
+        [DataRow("surname [eq] = Smith", "Smith")]
         public void Equals_Test(string rest, string surname )
         {
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
-            expected.Add(p => p.Surname == surname);
+             expected.Add(p => p.Surname == surname);
 
             RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
             // act
@@ -54,6 +55,7 @@ namespace RestParserTests
         [DataRow("surname[eq]=Smith&firstname[eq]=James", "Smith", "James")]
         [DataRow("surname[eq]=McArthur&firstname[eq]=John", "McArthur", "John")]
         [DataRow("surname[eq]=McArthur&firstname[eq]=James", "McArthur", "James")]
+        [DataRow("surname [eq] = McArthur & firstname [eq] = James", "McArthur", "James")]
         public void Multiple_Equals_Test(string rest, string surname, string firstname)
         {
             // arrange
