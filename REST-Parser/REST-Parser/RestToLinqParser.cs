@@ -28,6 +28,40 @@ namespace REST_Parser
 
             var parameter = Expression.Parameter(typeof(DataClassType), "p");
             GetCondition(condition, out string field, out string restOperator, out string value);
+
+            var paramType = Expression.PropertyOrField(parameter, field).Type;
+
+            switch (Type.GetTypeCode(paramType))
+            {
+                case TypeCode.String:
+                    return GetStringExpression(restOperator, parameter, field, value);
+                case TypeCode.Int32:
+                    return GetIntExpression(restOperator, parameter, field, value);
+                default:
+                    break;
+            }
+
+            return null;
+        }
+
+        private Expression<Func<DataClassType, bool>> GetIntExpression(string restOperator, ParameterExpression parameter, string field, string value)
+        {
+            int.TryParse(value, out int v);
+
+            switch (restOperator)
+            {
+                case "eq":
+                    return Expression.Lambda<Func<DataClassType, bool>>(
+                        Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
+                        parameter);
+                default:
+                    return null;
+
+            }
+        }
+
+        private Expression<Func<DataClassType, bool>> GetStringExpression(string restOperator, ParameterExpression parameter, string field, string value)
+        {
             switch (restOperator)
             {
                 case "eq":
@@ -35,10 +69,8 @@ namespace REST_Parser
                         Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(value)),
                         parameter);
                 default:
-                    break;
+                    return null;
             }
-
-            return null;
         }
 
         protected override internal string GetValue(string value)
