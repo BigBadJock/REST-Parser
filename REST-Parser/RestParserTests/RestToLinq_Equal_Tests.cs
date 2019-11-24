@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace RestParserTests
 {
     [TestClass]
-    public class RestToLinqTests
+    public class RestToLinq_Equal_Tests
     {
         IQueryable<TestItem> data;
 
@@ -19,10 +19,10 @@ namespace RestParserTests
         public void Initialize()
         {
             List<TestItem> d1 = new List<TestItem>();
-            d1.Add(new TestItem { FirstName = "Bob", Surname = "Roberts", Amount = 4, Price = 4 });
-            d1.Add(new TestItem { FirstName = "John", Surname = "McArthur", Amount = 5, Price = 5.25 });
-            d1.Add(new TestItem { FirstName = "James", Surname = "McArthur", Amount = 6, Price = 5.5 });
-            d1.Add(new TestItem { FirstName = "James", Surname = "Smith", Amount = 7, Price = 6.5 });
+            d1.Add(new TestItem { Id = 1, FirstName = "Bob", Surname = "Roberts", Amount = 4, Price = 4, Birthday=Convert.ToDateTime("1966/01/01")});
+            d1.Add(new TestItem { Id = 2, FirstName = "John", Surname = "McArthur", Amount = 5, Price = 5.25, Birthday = Convert.ToDateTime("1968/01/01")});
+            d1.Add(new TestItem { Id = 3, FirstName = "James", Surname = "McArthur", Amount = 6, Price = 5.5, Birthday=Convert.ToDateTime("1970/01/01")});
+            d1.Add(new TestItem { Id = 4, FirstName = "James", Surname = "Smith", Amount = 7, Price = 6.5, Birthday = Convert.ToDateTime("1972/01/01")});
             this.data = d1.AsQueryable();
         }
 
@@ -147,8 +147,29 @@ namespace RestParserTests
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("lastname[eq]=McArthur");
 
             // assert -expects exception
-            
+        }
 
+        [TestMethod]
+        public void EQ_Date()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Birthday == Convert.ToDateTime("1968/01/01"));
+            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[eq]=1968-01-01");
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where)
+            {
+                selectedData = selectedData.Where(where);
+            });
+
+            TestItem first = selectedData.FirstOrDefault();
+
+            // assert
+            Assert.AreEqual(2, first.Id);
         }
 
 

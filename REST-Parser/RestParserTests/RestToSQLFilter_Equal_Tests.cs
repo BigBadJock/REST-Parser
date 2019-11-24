@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace RestParserTests
 {
     [TestClass]
-    public class RestToSQLFilterTests
+    public class RestToSQLFilter_Equal_Tests
     {
 
         [DataTestMethod]
