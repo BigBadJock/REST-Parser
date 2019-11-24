@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using REST_Parser;
+using REST_Parser.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,6 +132,23 @@ namespace RestParserTests
             Assert.AreEqual(1, selectedData.Count());
 
             Assert.AreEqual(surname, first.Surname);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidRestException))]
+        public void EQ_NonExistantField()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Surname == "McArthur");
+            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("lastname[eq]=McArthur");
+
+            // assert -expects exception
+            
+
         }
 
 

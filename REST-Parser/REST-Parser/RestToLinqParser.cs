@@ -1,4 +1,5 @@
-﻿using System;
+﻿using REST_Parser.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -25,9 +26,14 @@ namespace REST_Parser
         private Expression<Func<DataClassType, bool>> parseCondition(string condition)
         {
             // surname[eq] = McArthur
+            string field = string.Empty;
+            string value = string.Empty;
+            string restOperator = string.Empty;
+            try
+            {
 
             var parameter = Expression.Parameter(typeof(DataClassType), "p");
-            GetCondition(condition, out string field, out string restOperator, out string value);
+            GetCondition(condition, out field, out  restOperator, out value);
 
             var paramType = Expression.PropertyOrField(parameter, field).Type;
 
@@ -42,10 +48,20 @@ namespace REST_Parser
             }
 
             return null;
+            }
+            catch (Exception)
+            {
+                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
+
+            }
+
         }
 
         private Expression<Func<DataClassType, bool>> GetIntExpression(string restOperator, ParameterExpression parameter, string field, string value)
         {
+            try
+            {
+
             int.TryParse(value, out int v);
 
             switch (restOperator)
@@ -58,10 +74,19 @@ namespace REST_Parser
                     return null;
 
             }
+            }
+            catch (Exception)
+            {
+                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
+            }
+
         }
 
         private Expression<Func<DataClassType, bool>> GetStringExpression(string restOperator, ParameterExpression parameter, string field, string value)
         {
+            try
+            {
+
             switch (restOperator)
             {
                 case "eq":
@@ -71,6 +96,12 @@ namespace REST_Parser
                 default:
                     return null;
             }
+            }
+            catch (Exception)
+            {
+                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
+            }
+
         }
 
         protected override internal string GetValue(string value)
