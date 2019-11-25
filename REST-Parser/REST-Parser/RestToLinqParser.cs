@@ -14,12 +14,14 @@ namespace REST_Parser
         List<Expression<Func<DataClassType, bool>>> expressions = new List<Expression<Func<DataClassType, bool>>>();
         private IStringExpressionGenerator<DataClassType> stringExpressionGenerator;
         private IIntExpressionGenerator<DataClassType> intExpressionGenerator;
+        private IDateExpressionGenerator<DataClassType> dateExpressionGenerator;
 
 
-        public RestToLinqParser(IStringExpressionGenerator<DataClassType> stringExpressionGenerator, IIntExpressionGenerator<DataClassType> intExpressionGenerator)
+        public RestToLinqParser(IStringExpressionGenerator<DataClassType> stringExpressionGenerator, IIntExpressionGenerator<DataClassType> intExpressionGenerator, IDateExpressionGenerator<DataClassType> dateExpressionGenerator)
         {
             this.stringExpressionGenerator = stringExpressionGenerator;
             this.intExpressionGenerator = intExpressionGenerator;
+            this.dateExpressionGenerator = dateExpressionGenerator;
         }
 
         public override List<Expression<Func<DataClassType, bool>>> Parse(string request)

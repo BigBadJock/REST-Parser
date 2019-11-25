@@ -18,6 +18,7 @@ namespace RestParserTests
         IQueryable<TestItem> data;
         IStringExpressionGenerator<TestItem> stringExpressionGenerator;
         IIntExpressionGenerator<TestItem> intExpressionGenerator;
+        IDateExpressionGenerator<TestItem> dateExpressionGenerator;
         RestToLinqParser<TestItem> parser;
 
         [TestInitialize]
@@ -32,14 +33,15 @@ namespace RestParserTests
 
             this.stringExpressionGenerator = new StringExpressionGenerator<TestItem>();
             this.intExpressionGenerator = new IntExpressionGenerator<TestItem>();
-            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator);
+            this.dateExpressionGenerator = new DateExpressionGenerator<TestItem>();
+            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator);
         }
 
         [DataTestMethod]
         [DataRow("surname[eq]=Roberts", "Roberts")]
         [DataRow("surname[eq]=Smith", "Smith")]
         [DataRow("surname [eq] = Smith", "Smith")]
-        public void Equals_Test(string rest, string surname )
+        public void Equals_String_Test(string rest, string surname )
         {
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
