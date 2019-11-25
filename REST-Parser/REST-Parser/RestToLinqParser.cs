@@ -45,6 +45,8 @@ namespace REST_Parser
                         return GetIntExpression(restOperator, parameter, field, value);
                     case TypeCode.DateTime:
                         return GetDateTimeExpression(restOperator, parameter, field, value);
+                    case TypeCode.Double:
+                        return GetDoubleExpression(restOperator, parameter, field, value);
 
                     default:
                         break;
@@ -56,6 +58,31 @@ namespace REST_Parser
             {
                 throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
 
+            }
+
+        }
+
+        private Expression<Func<DataClassType, bool>> GetDoubleExpression(string restOperator, ParameterExpression parameter, string field, string value)
+        {
+            try
+            {
+
+                double.TryParse(value, out double v);
+
+                switch (restOperator)
+                {
+                    case "eq":
+                        return Expression.Lambda<Func<DataClassType, bool>>(
+                            Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
+                            parameter);
+                    default:
+                        return null;
+
+                }
+            }
+            catch (Exception)
+            {
+                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
             }
 
         }

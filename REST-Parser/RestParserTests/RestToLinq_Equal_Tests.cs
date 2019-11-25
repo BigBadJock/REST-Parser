@@ -172,6 +172,27 @@ namespace RestParserTests
             Assert.AreEqual(2, first.Id);
         }
 
+        [TestMethod]
+        public void EQ_Double()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Price == 5.25);
+            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
 
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[eq]=5.25");
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where)
+            {
+                selectedData = selectedData.Where(where);
+            });
+
+            TestItem first = selectedData.FirstOrDefault();
+
+            // assert
+            Assert.AreEqual(2, first.Id);
+        }
     }
 }
