@@ -19,6 +19,7 @@ namespace RestParserTests
         IStringExpressionGenerator<TestItem> stringExpressionGenerator;
         IIntExpressionGenerator<TestItem> intExpressionGenerator;
         IDateExpressionGenerator<TestItem> dateExpressionGenerator;
+        private DoubleExpressionGenerator<TestItem> doubleExpressionGenerator;
         RestToLinqParser<TestItem> parser;
 
         [TestInitialize]
@@ -34,7 +35,8 @@ namespace RestParserTests
             this.stringExpressionGenerator = new StringExpressionGenerator<TestItem>();
             this.intExpressionGenerator = new IntExpressionGenerator<TestItem>();
             this.dateExpressionGenerator = new DateExpressionGenerator<TestItem>();
-            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator);
+            this.doubleExpressionGenerator = new DoubleExpressionGenerator<TestItem>();
+            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator, doubleExpressionGenerator);
         }
 
         [DataTestMethod]

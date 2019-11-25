@@ -2,10 +2,7 @@
 using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace REST_Parser
 {
@@ -15,13 +12,14 @@ namespace REST_Parser
         private IStringExpressionGenerator<DataClassType> stringExpressionGenerator;
         private IIntExpressionGenerator<DataClassType> intExpressionGenerator;
         private IDateExpressionGenerator<DataClassType> dateExpressionGenerator;
+        private IDoubleExpressionGenerator<DataClassType> doubleExpressionGenerator;
 
-
-        public RestToLinqParser(IStringExpressionGenerator<DataClassType> stringExpressionGenerator, IIntExpressionGenerator<DataClassType> intExpressionGenerator, IDateExpressionGenerator<DataClassType> dateExpressionGenerator)
+        public RestToLinqParser(IStringExpressionGenerator<DataClassType> stringExpressionGenerator, IIntExpressionGenerator<DataClassType> intExpressionGenerator, IDateExpressionGenerator<DataClassType> dateExpressionGenerator, IDoubleExpressionGenerator<DataClassType> doubleExpressionGenerator)
         {
             this.stringExpressionGenerator = stringExpressionGenerator;
             this.intExpressionGenerator = intExpressionGenerator;
             this.dateExpressionGenerator = dateExpressionGenerator;
+            this.doubleExpressionGenerator = doubleExpressionGenerator;
         }
 
         public override List<Expression<Func<DataClassType, bool>>> Parse(string request)
@@ -56,9 +54,9 @@ namespace REST_Parser
                     case TypeCode.Int32:
                         return this.intExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     case TypeCode.DateTime:
-                        return GetDateTimeExpression(restOperator, parameter, field, value);
+                        return this.dateExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     case TypeCode.Double:
-                        return GetDoubleExpression(restOperator, parameter, field, value);
+                        return this.doubleExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     case TypeCode.Decimal:
                         return GetDecimalExpression(restOperator, parameter, field, value);
 
@@ -72,31 +70,6 @@ namespace REST_Parser
             {
                 throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
 
-            }
-
-        }
-
-        private Expression<Func<DataClassType, bool>> GetDoubleExpression(string restOperator, ParameterExpression parameter, string field, string value)
-        {
-            try
-            {
-
-                double.TryParse(value, out double v);
-
-                switch (restOperator)
-                {
-                    case "eq":
-                        return Expression.Lambda<Func<DataClassType, bool>>(
-                            Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
-                    default:
-                        return null;
-
-                }
-            }
-            catch (Exception)
-            {
-                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
             }
 
         }
@@ -126,30 +99,6 @@ namespace REST_Parser
 
         }
 
-        private Expression<Func<DataClassType, bool>> GetDateTimeExpression(string restOperator, ParameterExpression parameter, string field, string value)
-        {
-            try
-            {
-
-                DateTime.TryParse(value, out DateTime d);
-
-                switch (restOperator)
-                {
-                    case "eq":
-                        return Expression.Lambda<Func<DataClassType, bool>>(
-                            Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(d)),
-                            parameter);
-                    default:
-                        return null;
-
-                }
-            }
-            catch (Exception)
-            {
-                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
-            }
-
-        }
 
     }
 }
