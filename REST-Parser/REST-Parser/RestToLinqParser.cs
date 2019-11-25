@@ -1,4 +1,5 @@
 ﻿using REST_Parser.Exceptions;
+using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,15 @@ namespace REST_Parser
     public class RestToLinqParser<DataClassType> : BaseParser<List<Expression<Func<DataClassType, bool>>>>, IRestParser<List<Expression<Func<DataClassType, bool>>>>
     {
         List<Expression<Func<DataClassType, bool>>> expressions = new List<Expression<Func<DataClassType, bool>>>();
+        private IStringExpressionGenerator<DataClassType> stringExpressionGenerator;
+        private IIntExpressionGenerator<DataClassType> intExpressionGenerator;
+
+
+        public RestToLinqParser(IStringExpressionGenerator<DataClassType> stringExpressionGenerator, IIntExpressionGenerator<DataClassType> intExpressionGenerator)
+        {
+            this.stringExpressionGenerator = stringExpressionGenerator;
+            this.intExpressionGenerator = intExpressionGenerator;
+        }
 
         public override List<Expression<Func<DataClassType, bool>>> Parse(string request)
         {
@@ -40,9 +50,9 @@ namespace REST_Parser
                 switch (Type.GetTypeCode(paramType))
                 {
                     case TypeCode.String:
-                        return GetStringExpression(restOperator, parameter, field, value);
+                        return this.stringExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     case TypeCode.Int32:
-                        return GetIntExpression(restOperator, parameter, field, value);
+                        return this.intExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     case TypeCode.DateTime:
                         return GetDateTimeExpression(restOperator, parameter, field, value);
                     case TypeCode.Double:
@@ -114,53 +124,6 @@ namespace REST_Parser
 
         }
 
-        private Expression<Func<DataClassType, bool>> GetIntExpression(string restOperator, ParameterExpression parameter, string field, string value)
-        {
-            try
-            {
-
-                int.TryParse(value, out int v);
-
-                switch (restOperator)
-                {
-                    case "eq":
-                        return Expression.Lambda<Func<DataClassType, bool>>(
-                            Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
-                    default:
-                        return null;
-
-                }
-            }
-            catch (Exception)
-            {
-                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
-            }
-
-        }
-
-        private Expression<Func<DataClassType, bool>> GetStringExpression(string restOperator, ParameterExpression parameter, string field, string value)
-        {
-            try
-            {
-
-                switch (restOperator)
-                {
-                    case "eq":
-                        return Expression.Lambda<Func<DataClassType, bool>>(
-                            Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(value)),
-                            parameter);
-                    default:
-                        return null;
-                }
-            }
-            catch (Exception)
-            {
-                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
-            }
-
-        }
-
         private Expression<Func<DataClassType, bool>> GetDateTimeExpression(string restOperator, ParameterExpression parameter, string field, string value)
         {
             try
@@ -184,25 +147,6 @@ namespace REST_Parser
                 throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
             }
 
-        }
-
-
-        protected override internal string GetValue(string value)
-        {
-            string sqlValue;
-            if (int.TryParse(value, out _))
-            {
-                sqlValue = value;
-            }
-            if (double.TryParse(value, out double d))
-            {
-                sqlValue = value;
-            }
-            else
-            {
-                sqlValue = value;
-            }
-            return sqlValue;
         }
 
     }

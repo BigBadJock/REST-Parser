@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using REST_Parser;
 using REST_Parser.Exceptions;
+using REST_Parser.ExpressionGenerators;
+using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,9 @@ namespace RestParserTests
     public class RestToLinq_Equal_Tests
     {
         IQueryable<TestItem> data;
+        IStringExpressionGenerator<TestItem> stringExpressionGenerator;
+        IIntExpressionGenerator<TestItem> intExpressionGenerator;
+        RestToLinqParser<TestItem> parser;
 
         [TestInitialize]
         public void Initialize()
@@ -24,6 +29,10 @@ namespace RestParserTests
             d1.Add(new TestItem { Id = 3, FirstName = "James", Surname = "McArthur", Amount = 6, Price = 5.5, Rate = 2.3m, Birthday = Convert.ToDateTime("1970/01/01")});
             d1.Add(new TestItem { Id = 4, FirstName = "James", Surname = "Smith", Amount = 7, Price = 6.5, Rate = 2.4m, Birthday = Convert.ToDateTime("1972/01/01")});
             this.data = d1.AsQueryable();
+
+            this.stringExpressionGenerator = new StringExpressionGenerator<TestItem>();
+            this.intExpressionGenerator = new IntExpressionGenerator<TestItem>();
+            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator);
         }
 
         [DataTestMethod]
@@ -36,7 +45,6 @@ namespace RestParserTests
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
              expected.Add(p => p.Surname == surname);
 
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);
 
@@ -64,7 +72,6 @@ namespace RestParserTests
             expected.Add(p => p.Surname == surname);
             expected.Add(p => p.FirstName == firstname);
 
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);
 
@@ -90,7 +97,6 @@ namespace RestParserTests
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
             expected.Add(p => p.Amount == amount);
 
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);
 
@@ -117,7 +123,6 @@ namespace RestParserTests
             expected.Add(p => p.Surname == surname);
             expected.Add(p => p.Amount == amount);
 
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);
 
@@ -141,7 +146,6 @@ namespace RestParserTests
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
             expected.Add(p => p.Surname == "McArthur");
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
 
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("lastname[eq]=McArthur");
@@ -157,7 +161,6 @@ namespace RestParserTests
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
             expected.Add(p => p.Birthday == Convert.ToDateTime(date));
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
 
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);
@@ -182,7 +185,6 @@ namespace RestParserTests
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
             expected.Add(p => p.Price == price);
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
 
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);
@@ -208,7 +210,6 @@ namespace RestParserTests
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
             expected.Add(p => p.Rate == Convert.ToDecimal(rate));
-            RestToLinqParser<TestItem> parser = new RestToLinqParser<TestItem>();
 
             // act
             List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);

@@ -32,25 +32,7 @@ namespace REST_Parser
             string[] sides = condition.Split('=');
             field = (sides[0].Substring(0, sides[0].IndexOf("["))).Trim();
             restOperator = ExtractOperator(sides[0]);
-            value = GetValue(sides[1]).Trim();
-        }
-
-        protected virtual internal string GetValue(string value)
-        {
-            string sqlValue;
-            if (int.TryParse(value, out _))
-            {
-                sqlValue = value;
-            }
-            if (double.TryParse(value, out double d))
-            {
-                sqlValue = value;
-            }
-            else
-            {
-                sqlValue = $"'{value}'";
-            }
-            return sqlValue;
+            value = sides[1].Trim();
         }
 
 
