@@ -20,6 +20,10 @@ namespace REST_Parser.ExpressionGenerators
                         return Expression.Lambda<Func<T, bool>>(
                             Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
                             parameter);
+                    case "ne":
+                        return Expression.Lambda<Func<T, bool>>(
+                            Expression.NotEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
+                            parameter);
                     default:
                         return null;
 

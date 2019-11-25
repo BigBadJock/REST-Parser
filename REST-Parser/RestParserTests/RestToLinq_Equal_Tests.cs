@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestParserTests
 {
@@ -47,7 +45,7 @@ namespace RestParserTests
         [DataRow("surname[eq]=Roberts", "Roberts")]
         [DataRow("surname[eq]=Smith", "Smith")]
         [DataRow("surname [eq] = Smith", "Smith")]
-        public void Equals_String_Test(string rest, string surname )
+        public void EQ_String_Test(string rest, string surname )
         {
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
@@ -73,7 +71,7 @@ namespace RestParserTests
         [DataRow("surname[eq]=McArthur&firstname[eq]=John", "McArthur", "John")]
         [DataRow("surname[eq]=McArthur&firstname[eq]=James", "McArthur", "James")]
         [DataRow("surname [eq] = McArthur & firstname [eq] = James", "McArthur", "James")]
-        public void Multiple_Equals_Test(string rest, string surname, string firstname)
+        public void EQ_Multiple_Test(string rest, string surname, string firstname)
         {
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
@@ -99,7 +97,7 @@ namespace RestParserTests
         [DataTestMethod]
         [DataRow("amount[eq]=5", 5, "McArthur")]
         [DataRow("amount[eq]=7", 7, "Smith")]
-        public void Equals_INT_Test(string rest, int amount, string surname)
+        public void EQ_INT_Test(string rest, int amount, string surname)
         {
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
@@ -124,7 +122,7 @@ namespace RestParserTests
         [DataTestMethod]
         [DataRow("surname[eq]=McArthur&amount[eq]=5", 5, "McArthur")]
         [DataRow("surname[eq]=Smith&amount[eq]=7", 7, "Smith")]
-        public void Multiple_Mixed_Equals_INT_Test(string rest, int amount, string surname)
+        public void EQ_Multiple_Mixed_INT_Test(string rest, int amount, string surname)
         {
             // arrange
             List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();

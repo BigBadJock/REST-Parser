@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace REST_Parser
 {
-    public class RestToLinqParser<DataClassType> : BaseParser<List<Expression<Func<DataClassType, bool>>>>, IRestParser<List<Expression<Func<DataClassType, bool>>>>
+    public class RestToLinqParser<DataClassType> : IRestParser<List<Expression<Func<DataClassType, bool>>>>
     {
         List<Expression<Func<DataClassType, bool>>> expressions = new List<Expression<Func<DataClassType, bool>>>();
         private IStringExpressionGenerator<DataClassType> stringExpressionGenerator;
@@ -26,7 +26,7 @@ namespace REST_Parser
             this.booleanExpressionGenerator = booleanExpressionGenerator;
         }
 
-        public override List<Expression<Func<DataClassType, bool>>> Parse(string request)
+        public List<Expression<Func<DataClassType, bool>>> Parse(string request)
         {
             List<Expression<Func<DataClassType, bool>>> linqConditions = new List<Expression<Func<DataClassType, bool>>>();
             string[] conditions = GetConditions(request);
@@ -78,6 +78,32 @@ namespace REST_Parser
             }
 
         }
+
+        protected internal string[] GetConditions(string request)
+        {
+            string[] conditions;
+            conditions = request.Split('&');
+            return conditions;
+        }
+
+
+        protected internal string ExtractOperator(string query)
+        {
+            int start = query.IndexOf("[") + 1;
+            int end = query.IndexOf("]");
+            int length = end - start;
+            string op = query.Substring(start, length).Trim();
+            return op;
+        }
+
+        protected internal void GetCondition(string condition, out string field, out string restOperator, out string value)
+        {
+            string[] sides = condition.Split('=');
+            field = (sides[0].Substring(0, sides[0].IndexOf("["))).Trim();
+            restOperator = ExtractOperator(sides[0]);
+            value = sides[1].Trim();
+        }
+
 
     }
 }
