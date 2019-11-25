@@ -45,56 +45,75 @@ namespace RestParserTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(REST_InvalidValueException))]
         public void Invalid_Date_value()
         {
-            // arrange
-
-            // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[eq]=false");
-
-
-            // assert - expect REST_InvalidValueException
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[eq]=false");
+                Assert.Fail("Expected REST_InvalidValueException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid value (false) for field (birthday)", ex.Message);
+            }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(REST_InvalidValueException))]
         public void Invalid_Int_value()
         {
-            // arrange
-            // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Amount[eq]=bob");
-            // assert - expect REST_InvalidValueException
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Amount[eq]=bob");
+                Assert.Fail("Expected REST_InvalidValueException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid value (bob) for field (Amount)", ex.Message);
+            }
+
         }
 
         [TestMethod]
-        [ExpectedException(typeof(REST_InvalidValueException))]
         public void Invalid_Bool_value()
         {
-            // arrange
-            // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Flag[eq]=bob");
-            // assert - expect REST_InvalidValueException
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Flag[eq]=bob");
+                Assert.Fail("Expected REST_InvalidValueException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid value (bob) for field (Flag)", ex.Message);
+            }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(REST_InvalidValueException))]
         public void Invalid_Decimal_value()
         {
-            // arrange
-            // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Rate[eq]=bob");
-            // assert - expect REST_InvalidValueException
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Rate[eq]=bob");
+                Assert.Fail("Expected REST_InvalidValueException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid value (bob) for field (Rate)", ex.Message);
+            }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(REST_InvalidValueException))]
         public void Invalid_Double_value()
         {
-            // arrange
-            // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Price[eq]=bob");
-            // assert - expect REST_InvalidValueException
+
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Price[eq]=bob");
+                Assert.Fail("Expected REST_InvalidValueException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid value (bob) for field (Price)", ex.Message);
+            }
         }
     }
 }
