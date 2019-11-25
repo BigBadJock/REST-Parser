@@ -9,6 +9,7 @@ namespace RestParserTests
         public string FirstName { get; set; }
         public int Amount { get; set; }
         public double Price { get; set; }
+        public decimal Rate { get; set; }
         public DateTime Birthday { get; set; }
     }
 }
