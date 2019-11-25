@@ -53,5 +53,46 @@ namespace RestParserTests
                 Assert.AreEqual("The REST request contained an invalid operator (gt) for field (surname)", ex.Message);
             }
         }
+
+        [TestMethod]
+        public void Invalid_String_Operator_GreaterThanOrEquals()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[ge]=bob");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (ge) for field (surname)", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Invalid_Boolean_Operator_GreaterThan()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[gt]=true");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (gt) for field (flag)", ex.Message);
+            }
+        }
+        [TestMethod]
+        public void Invalid_Boolean_Operator_GreaterThanOrEquals()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ge]=true");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (ge) for field (flag)", ex.Message);
+            }
+        }
     }
 }

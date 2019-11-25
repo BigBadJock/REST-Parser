@@ -28,10 +28,17 @@ namespace REST_Parser.ExpressionGenerators
                         return Expression.Lambda<Func<T, bool>>(
                             Expression.GreaterThan(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
                             parameter);
+                    case "ge":
+                        return Expression.Lambda<Func<T, bool>>(
+                            Expression.GreaterThanOrEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
+                            parameter);
                     default:
-                        return null;
-
+                        throw new REST_InvalidOperatorException(field, restOperator);
                 }
+            }
+            catch (REST_InvalidOperatorException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {

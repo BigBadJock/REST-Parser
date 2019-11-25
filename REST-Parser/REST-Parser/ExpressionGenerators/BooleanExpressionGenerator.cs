@@ -28,9 +28,12 @@ namespace REST_Parser.ExpressionGenerators
                             Expression.NotEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
                             parameter);
                     default:
-                        return null;
-
+                        throw new REST_InvalidOperatorException(field, restOperator);
                 }
+            }
+            catch (REST_InvalidOperatorException ex)
+            {
+                throw ex;
             }
             catch (Exception)
             {
