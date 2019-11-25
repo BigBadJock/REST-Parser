@@ -11,8 +11,7 @@ namespace REST_Parser.ExpressionGenerators
         {
             try
             {
-
-                int.TryParse(value, out int v);
+                int v = int.Parse(value);
 
                 switch (restOperator)
                 {
@@ -31,7 +30,7 @@ namespace REST_Parser.ExpressionGenerators
             }
             catch (Exception)
             {
-                throw new REST_InvalidFieldnameException(string.Format("field={0} value={1}", field, value));
+                throw new REST_InvalidValueException(field, value);
             }
         }
     }

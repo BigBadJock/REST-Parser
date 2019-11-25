@@ -15,7 +15,7 @@ namespace REST_Parser.ExpressionGenerators
         {
             try
             {
-                decimal.TryParse(value, out decimal v);
+                decimal v = decimal.Parse(value);
 
                 switch (restOperator)
                 {
@@ -34,7 +34,7 @@ namespace REST_Parser.ExpressionGenerators
             }
             catch (Exception)
             {
-                throw new REST_InvalidFieldnameException(string.Format("field={0} value={1}", field, value));
+                throw new REST_InvalidValueException(field, value);
             }
         }
     }
