@@ -11,5 +11,6 @@ namespace RestParserTests
         public double Price { get; set; }
         public decimal Rate { get; set; }
         public DateTime Birthday { get; set; }
+        public bool Flag { get; set; }
     }
 }
