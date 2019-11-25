@@ -23,6 +23,10 @@ namespace REST_Parser.ExpressionGenerators
                         return Expression.Lambda<Func<T, bool>>(
                             Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
                             parameter);
+                    case "ne":
+                        return Expression.Lambda<Func<T, bool>>(
+                            Expression.NotEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
+                            parameter);
                     default:
                         return null;
 
@@ -30,7 +34,7 @@ namespace REST_Parser.ExpressionGenerators
             }
             catch (Exception)
             {
-                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
+                throw new REST_InvalidFieldnameException(string.Format("field={0} value={1}", field, value));
             }
         }
     }

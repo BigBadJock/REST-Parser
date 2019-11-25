@@ -91,5 +91,132 @@ namespace RestParserTests
                 Assert.AreNotEqual(5, item.Amount);
             }
         }
+
+        [TestMethod]
+        public void NE_Double()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Price != 5.25);
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[ne]=5.25");
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
+                selectedData = selectedData.Where(where);
+            });
+
+            int count = selectedData.Count();
+
+            // assert
+            Assert.AreEqual(3, selectedData.Count());
+            foreach (TestItem item in selectedData)
+            {
+                Assert.AreNotEqual(5.25, item.Amount);
+            }
+        }
+
+        [TestMethod]
+        public void NE_Decimal()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Rate != 2.2m);
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[ne]=2.2");
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
+                selectedData = selectedData.Where(where);
+            });
+
+            int count = selectedData.Count();
+
+            // assert
+            Assert.AreEqual(3, selectedData.Count());
+            foreach (TestItem item in selectedData)
+            {
+                Assert.AreNotEqual(2.2m, item.Rate);
+            }
+        }
+
+
+        [TestMethod]
+        public void NE_Date()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Birthday != Convert.ToDateTime("1968/01/01"));
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[ne]=1968-01-01");
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
+                selectedData = selectedData.Where(where);
+            });
+
+            int count = selectedData.Count();
+
+            // assert
+            Assert.AreEqual(3, selectedData.Count());
+            foreach (TestItem item in selectedData)
+            {
+                Assert.AreNotEqual(Convert.ToDateTime("1968/01/01"), item.Birthday);
+            }
+        }
+
+        [TestMethod]
+        public void NE_Boolean_true()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Flag != true);
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ne]=true");
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
+                selectedData = selectedData.Where(where);
+            });
+
+            int count = selectedData.Count();
+
+            // assert
+            Assert.AreEqual(1, selectedData.Count());
+            foreach (TestItem item in selectedData)
+            {
+                Assert.AreEqual(false, item.Flag);
+            }
+        }
+
+        [TestMethod]
+        public void NE_Boolean_false()
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.Flag != true);
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ne]=false");
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
+                selectedData = selectedData.Where(where);
+            });
+
+            int count = selectedData.Count();
+
+            // assert
+            Assert.AreEqual(3, selectedData.Count());
+            foreach (TestItem item in selectedData)
+            {
+                Assert.AreEqual(true, item.Flag);
+            }
+        }
+
     }
 }

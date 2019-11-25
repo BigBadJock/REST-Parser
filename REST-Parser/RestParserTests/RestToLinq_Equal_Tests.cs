@@ -146,7 +146,7 @@ namespace RestParserTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidRestException))]
+        [ExpectedException(typeof(REST_InvalidFieldnameException))]
         public void EQ_NonExistantField()
         {
             // arrange

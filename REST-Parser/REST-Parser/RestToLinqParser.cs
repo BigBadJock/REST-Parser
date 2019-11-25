@@ -43,15 +43,21 @@ namespace REST_Parser
             string field = string.Empty;
             string value = string.Empty;
             string restOperator = string.Empty;
+            ParameterExpression parameter;
+            Type paramType;
             try
             {
-
-                var parameter = Expression.Parameter(typeof(DataClassType), "p");
+                parameter = Expression.Parameter(typeof(DataClassType), "p");
                 GetCondition(condition, out field, out restOperator, out value);
+                paramType = Expression.PropertyOrField(parameter, field).Type;
+            }
+            catch (Exception)
+            {
+                throw new REST_InvalidFieldnameException(field);
 
-                var paramType = Expression.PropertyOrField(parameter, field).Type;
+            }
 
-                switch (Type.GetTypeCode(paramType))
+            switch (Type.GetTypeCode(paramType))
                 {
                     case TypeCode.String:
                         return this.stringExpressionGenerator.GetExpression(restOperator, parameter, field, value);
@@ -70,12 +76,8 @@ namespace REST_Parser
                 }
 
                 return null;
-            }
-            catch (Exception)
-            {
-                throw new InvalidRestException(string.Format("field={0} value={1}", field, value));
+ 
 
-            }
 
         }
 
