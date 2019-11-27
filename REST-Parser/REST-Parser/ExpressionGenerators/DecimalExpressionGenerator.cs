@@ -39,6 +39,10 @@ namespace REST_Parser.ExpressionGenerators
                         return Expression.Lambda<Func<T, bool>>(
                             Expression.LessThan(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
                             parameter);
+                    case "le":
+                        return Expression.Lambda<Func<T, bool>>(
+                            Expression.LessThanOrEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
+                            parameter);
                     default:
                         throw new REST_InvalidOperatorException(field, restOperator);
                 }
