@@ -133,5 +133,33 @@ namespace RestParserTests
                 Assert.IsTrue(item.Birthday >= Convert.ToDateTime("1968-01-01"));
             }
         }
+
+        [TestMethod]
+        public void GE_String()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[ge]=bob");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (ge) for field (surname)", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void GE_Boolean()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ge]=true");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (ge) for field (flag)", ex.Message);
+            }
+        }
     }
 }

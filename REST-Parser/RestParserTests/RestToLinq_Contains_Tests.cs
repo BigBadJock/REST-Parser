@@ -67,5 +67,75 @@ namespace RestParserTests
             Assert.AreEqual(surname, first.Surname);
         }
 
+        [TestMethod]
+        public void Contains_Int_Test()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("amount[contains]=5");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (contains) for field (amount)", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Contains_Double_Test()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[contains]=5");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (contains) for field (price)", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Contains_Decimal_Test()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[contains]=5");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (contains) for field (rate)", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Contains_Date_Test()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[contains]=2019/01/01");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (contains) for field (birthday)", ex.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Contains_Boolean_Test()
+        {
+            try
+            {
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[contains]=true");
+                Assert.Fail("Expected REST_InvalidOperatorException not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("The REST request contained an invalid operator (contains) for field (flag)", ex.Message);
+            }
+        }
+
     }
 }
