@@ -49,7 +49,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[eq]=false");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[eq]=false").Expressions;
                 Assert.Fail("Expected REST_InvalidValueException not thrown");
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Amount[eq]=bob");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Amount[eq]=bob").Expressions;
                 Assert.Fail("Expected REST_InvalidValueException not thrown");
             }
             catch (Exception ex)
@@ -78,7 +78,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Flag[eq]=bob");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Flag[eq]=bob").Expressions;
                 Assert.Fail("Expected REST_InvalidValueException not thrown");
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Rate[eq]=bob");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Rate[eq]=bob").Expressions;
                 Assert.Fail("Expected REST_InvalidValueException not thrown");
             }
             catch (Exception ex)
@@ -107,7 +107,7 @@ namespace RestParserTests
 
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Price[eq]=bob");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("Price[eq]=bob").Expressions;
                 Assert.Fail("Expected REST_InvalidValueException not thrown");
             }
             catch (Exception ex)

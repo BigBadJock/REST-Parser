@@ -45,7 +45,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[gt]=bob");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[gt]=bob").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -59,7 +59,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[ge]=bob");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[ge]=bob").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -73,7 +73,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[gt]=true");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[gt]=true").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ge]=true");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ge]=true").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)

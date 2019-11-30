@@ -1,22 +1,24 @@
 ﻿using REST_Parser.Exceptions;
 using REST_Parser.ExpressionGenerators.Interfaces;
+using REST_Parser.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace REST_Parser
 {
-    public class RestToLinqParser<DataClassType> : IRestParser<List<Expression<Func<DataClassType, bool>>>>
+    public class RestToLinqParser<T> : IRestParser<T>
     {
-        List<Expression<Func<DataClassType, bool>>> expressions = new List<Expression<Func<DataClassType, bool>>>();
-        private IStringExpressionGenerator<DataClassType> stringExpressionGenerator;
-        private IIntExpressionGenerator<DataClassType> intExpressionGenerator;
-        private IDateExpressionGenerator<DataClassType> dateExpressionGenerator;
-        private IDoubleExpressionGenerator<DataClassType> doubleExpressionGenerator;
-        private IDecimalExpressionGenerator<DataClassType> decimalExpressionGenerator;
-        private IBooleanExpressionGenerator<DataClassType> booleanExpressionGenerator;
+        List<Expression<Func<T, bool>>> expressions = new List<Expression<Func<T, bool>>>();
+        private IStringExpressionGenerator<T> stringExpressionGenerator;
+        private IIntExpressionGenerator<T> intExpressionGenerator;
+        private IDateExpressionGenerator<T> dateExpressionGenerator;
+        private IDoubleExpressionGenerator<T> doubleExpressionGenerator;
+        private IDecimalExpressionGenerator<T> decimalExpressionGenerator;
+        private IBooleanExpressionGenerator<T> booleanExpressionGenerator;
 
-        public RestToLinqParser(IStringExpressionGenerator<DataClassType> stringExpressionGenerator, IIntExpressionGenerator<DataClassType> intExpressionGenerator, IDateExpressionGenerator<DataClassType> dateExpressionGenerator, IDoubleExpressionGenerator<DataClassType> doubleExpressionGenerator, IDecimalExpressionGenerator<DataClassType> decimalExpressionGenerator, IBooleanExpressionGenerator<DataClassType> booleanExpressionGenerator)
+        public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator)
         {
             this.stringExpressionGenerator = stringExpressionGenerator;
             this.intExpressionGenerator = intExpressionGenerator;
@@ -26,20 +28,57 @@ namespace REST_Parser
             this.booleanExpressionGenerator = booleanExpressionGenerator;
         }
 
-        public List<Expression<Func<DataClassType, bool>>> Parse(string request)
+        public RestResult<T> Parse(string request)
         {
-            List<Expression<Func<DataClassType, bool>>> linqConditions = new List<Expression<Func<DataClassType, bool>>>();
+            RestResult<T> result = new RestResult<T>();
+            List<Expression<Func<T, bool>>> linqConditions = new List<Expression<Func<T, bool>>>();
+            List<SortBy<T>> sortOrder = new List<SortBy<T>>();
             string[] conditions = GetConditions(request);
             foreach (string condition in conditions)
             {
-                linqConditions.Add(parseCondition(condition));
+                if (isSortCondition(condition))
+                {
+                    sortOrder.Add(parseSortCondition(condition));
+                }
+                else
+                {
+                    linqConditions.Add(parseCondition(condition));
+                }
             }
-            return linqConditions;
+            result.Expressions = linqConditions;
+            result.SortOrder = sortOrder;
+            return result;
         }
 
-        private Expression<Func<DataClassType, bool>> parseCondition(string condition)
+        private SortBy<T> parseSortCondition(string condition)
         {
-            // surname[eq] = McArthur
+            string sort = string.Empty;
+            string sortOrder = string.Empty;
+            string field = string.Empty;
+            ParameterExpression parameter;
+
+            parameter = Expression.Parameter(typeof(T), "p");
+            GetCondition(condition, out sort, out sortOrder, out field);
+
+            var expression = Expression.Lambda<Func<T, object>>(Expression.Convert(Expression.Property(parameter, field), typeof(object)), parameter);
+
+            return new SortBy<T> { Expression = expression, Ascending = (sortOrder.ToUpper() == "ASC") };
+        }
+
+        private bool isSortCondition(string condition)
+        {
+            return condition.Contains("$sort_by");
+        }
+
+        protected internal string[] GetConditions(string request)
+        {
+            string[] conditions;
+            conditions = request.Split('&');
+            return conditions;
+        }
+
+        private Expression<Func<T, bool>> parseCondition(string condition)
+        {
             string field = string.Empty;
             string value = string.Empty;
             string restOperator = string.Empty;
@@ -47,7 +86,7 @@ namespace REST_Parser
             Type paramType;
             try
             {
-                parameter = Expression.Parameter(typeof(DataClassType), "p");
+                parameter = Expression.Parameter(typeof(T), "p");
                 GetCondition(condition, out field, out restOperator, out value);
                 paramType = Expression.PropertyOrField(parameter, field).Type;
             }
@@ -58,36 +97,28 @@ namespace REST_Parser
             }
 
             switch (Type.GetTypeCode(paramType))
-                {
-                    case TypeCode.String:
-                        return this.stringExpressionGenerator.GetExpression(restOperator, parameter, field, value);
-                    case TypeCode.Int32:
-                        return this.intExpressionGenerator.GetExpression(restOperator, parameter, field, value);
-                    case TypeCode.DateTime:
-                        return this.dateExpressionGenerator.GetExpression(restOperator, parameter, field, value);
-                    case TypeCode.Double:
-                        return this.doubleExpressionGenerator.GetExpression(restOperator, parameter, field, value);
-                    case TypeCode.Decimal:
-                        return this.decimalExpressionGenerator.GetExpression(restOperator, parameter, field, value);
-                    case TypeCode.Boolean:
-                        return this.booleanExpressionGenerator.GetExpression(restOperator, parameter, field, value);
-                    default:
-                        break;
-                }
+            {
+                case TypeCode.String:
+                    return this.stringExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                case TypeCode.Int32:
+                    return this.intExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                case TypeCode.DateTime:
+                    return this.dateExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                case TypeCode.Double:
+                    return this.doubleExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                case TypeCode.Decimal:
+                    return this.decimalExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                case TypeCode.Boolean:
+                    return this.booleanExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                default:
+                    break;
+            }
 
-                return null;
- 
+            return null;
+
 
 
         }
-
-        protected internal string[] GetConditions(string request)
-        {
-            string[] conditions;
-            conditions = request.Split('&');
-            return conditions;
-        }
-
 
         protected internal string ExtractOperator(string query)
         {
@@ -104,6 +135,53 @@ namespace REST_Parser
             field = (sides[0].Substring(0, sides[0].IndexOf("["))).Trim();
             restOperator = ExtractOperator(sides[0]);
             value = sides[1].Trim();
+        }
+
+        public IQueryable<T> Run(IQueryable<T> source, string rest)
+        {
+            RestResult<T> restResult = this.Parse(rest);
+
+            IQueryable<T> selectedData = source;
+            IOrderedQueryable<T> orderedData = null;
+            restResult.Expressions.ForEach(delegate (Expression<Func<T, bool>> where) {
+                selectedData = selectedData.Where(where);
+            });
+            bool firstSort = true;
+            restResult.SortOrder.ForEach(delegate (SortBy<T> sortBy)
+            {
+                if (firstSort)
+                {
+                    if (sortBy.Ascending)
+                    {
+                        orderedData = selectedData.OrderBy<T, object>(sortBy.Expression);
+                    }
+                    else
+                    {
+                        orderedData = selectedData.OrderByDescending<T, object>(sortBy.Expression);
+                    }
+                    firstSort = false;
+                }
+                else
+                {
+                    if (sortBy.Ascending)
+                    {
+                        orderedData = orderedData.ThenBy<T, object>(sortBy.Expression);
+                    }
+                    else
+                    {
+                        orderedData = orderedData.ThenByDescending<T, object>(sortBy.Expression);
+                    }
+                }
+
+            });
+            if (!firstSort)
+            {
+                return orderedData;
+            }
+            else
+            {
+                return selectedData;
+            }
         }
 
 

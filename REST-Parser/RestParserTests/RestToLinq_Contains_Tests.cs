@@ -53,7 +53,7 @@ namespace RestParserTests
             expected.Add(p => p.Surname.Contains(surname));
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest);
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest).Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -72,7 +72,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("amount[contains]=5");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("amount[contains]=5").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[contains]=5");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[contains]=5").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -100,7 +100,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[contains]=5");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[contains]=5").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -114,7 +114,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[contains]=2019/01/01");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[contains]=2019/01/01").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -128,7 +128,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[contains]=true");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[contains]=true").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)

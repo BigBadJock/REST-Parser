@@ -49,7 +49,7 @@ namespace RestParserTests
             expected.Add(p => p.Amount > 5);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("amount[gt]=5");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("amount[gt]=5").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -71,7 +71,7 @@ namespace RestParserTests
             expected.Add(p => p.Price > 5.25);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[gt]=5.25");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[gt]=5.25").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -93,7 +93,7 @@ namespace RestParserTests
             expected.Add(p => p.Rate > 2.2m);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[gt]=2.2");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[gt]=2.2").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -115,7 +115,7 @@ namespace RestParserTests
             expected.Add(p => p.Birthday > Convert.ToDateTime("1968/01/01"));
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[gt]=1968-01-01");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[gt]=1968-01-01").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -134,7 +134,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[gt]=bob");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[gt]=bob").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)
@@ -148,7 +148,7 @@ namespace RestParserTests
         {
             try
             {
-                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[gt]=true");
+                List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[gt]=true").Expressions;
                 Assert.Fail("Expected REST_InvalidOperatorException not thrown");
             }
             catch (Exception ex)

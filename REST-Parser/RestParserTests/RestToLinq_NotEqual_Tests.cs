@@ -50,7 +50,7 @@ namespace RestParserTests
             expected.Add(p => p.Surname != "McArthur");
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[ne]=McArthur");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("surname[ne]=McArthur").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -75,7 +75,7 @@ namespace RestParserTests
             expected.Add(p => p.Amount != 5);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("amount[ne]=5");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("amount[ne]=5").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -100,7 +100,7 @@ namespace RestParserTests
             expected.Add(p => p.Price != 5.25);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[ne]=5.25");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("price[ne]=5.25").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -125,7 +125,7 @@ namespace RestParserTests
             expected.Add(p => p.Rate != 2.2m);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[ne]=2.2");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("rate[ne]=2.2").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -151,7 +151,7 @@ namespace RestParserTests
             expected.Add(p => p.Birthday != Convert.ToDateTime("1968/01/01"));
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[ne]=1968-01-01");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("birthday[ne]=1968-01-01").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -176,7 +176,7 @@ namespace RestParserTests
             expected.Add(p => p.Flag != true);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ne]=true");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ne]=true").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
@@ -201,7 +201,7 @@ namespace RestParserTests
             expected.Add(p => p.Flag != true);
 
             // act
-            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ne]=false");
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("flag[ne]=false").Expressions;
 
             IQueryable<TestItem> selectedData = data;
             expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {

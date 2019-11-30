@@ -1,4 +1,5 @@
-﻿using System;
+﻿using REST_Parser.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace REST_Parser
 {
     public interface IRestParser<T>
     {
-        T Parse(string request); 
+        RestResult<T> Parse(string request);
+
+        IQueryable<T> Run(IQueryable<T> source, string rest);
     }
 }
