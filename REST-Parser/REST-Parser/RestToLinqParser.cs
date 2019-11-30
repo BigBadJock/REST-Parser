@@ -40,6 +40,10 @@ namespace REST_Parser
                 {
                     sortOrder.Add(parseSortCondition(condition));
                 }
+                else if (isPageCondition(condition))
+                {
+                    result = parsePageCondition(result, condition);
+                }
                 else
                 {
                     linqConditions.Add(parseCondition(condition));
@@ -48,6 +52,30 @@ namespace REST_Parser
             result.Expressions = linqConditions;
             result.SortOrder = sortOrder;
             return result;
+        }
+
+        private bool isPageCondition(string condition)
+        {
+            return condition.Contains("$page");
+        }
+
+        private RestResult<T> parsePageCondition(RestResult<T> result, string condition)
+        {
+            string p = string.Empty;
+            string value = string.Empty;
+
+            GetCondition(condition, out p, out var ignore, out value);
+
+            if(p.ToUpper() == "$PAGE")
+            {
+                result.Page = int.Parse(value);
+            }
+            if(p.ToUpper() == "$PAGESIZE")
+            {
+                result.PageSize = int.Parse(value);
+            }
+            return result;
+
         }
 
         private SortBy<T> parseSortCondition(string condition)
@@ -132,12 +160,20 @@ namespace REST_Parser
         protected internal void GetCondition(string condition, out string field, out string restOperator, out string value)
         {
             string[] sides = condition.Split('=');
-            field = (sides[0].Substring(0, sides[0].IndexOf("["))).Trim();
-            restOperator = ExtractOperator(sides[0]);
+            restOperator = "";
+            if (sides[0].Contains("["))
+            {
+                field = (sides[0].Substring(0, sides[0].IndexOf("["))).Trim();
+                restOperator = ExtractOperator(sides[0]);
+            }
+            else
+            {
+                field = sides[0];
+            }
             value = sides[1].Trim();
         }
-
-        public IQueryable<T> Run(IQueryable<T> source, string rest)
+        
+        public RestResult<T> Run(IQueryable<T> source, string rest)
         {
             RestResult<T> restResult = this.Parse(rest);
 
@@ -176,12 +212,30 @@ namespace REST_Parser
             });
             if (!firstSort)
             {
-                return orderedData;
+
+                if(restResult.Page > 0 || restResult.PageSize > 0)
+                {
+                    restResult.Page = restResult.Page == 0 ? 1 : restResult.Page;
+                    restResult.PageSize = restResult.PageSize == 0 ? 25 : restResult.PageSize;
+
+                    var totalCount = orderedData.Count();
+                    var pageCount = totalCount / restResult.PageSize;
+                    if (pageCount * restResult.PageSize < totalCount) pageCount += 1;
+                    if (restResult.Page > pageCount) restResult.Page = pageCount;
+                    restResult.PageCount = pageCount;
+                    restResult.TotalCount = totalCount;
+
+                    orderedData = (IOrderedQueryable<T>)orderedData.Skip(restResult.PageSize * (restResult.Page - 1)).Take(restResult.PageSize);
+                }
+
+                restResult.Data = orderedData;
             }
             else
             {
-                return selectedData;
+                restResult.Data = selectedData;
             }
+
+            return restResult;
         }
 
 

@@ -54,7 +54,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -77,7 +77,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -100,7 +100,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -121,7 +121,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
             // assert
             Assert.AreEqual(4, selectedData.Count());
             int previous = 999;
@@ -142,7 +142,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -163,7 +163,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
             // assert
             Assert.AreEqual(4, selectedData.Count());
             double previous = 999;
@@ -183,7 +183,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -204,7 +204,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
             // assert
             Assert.AreEqual(4, selectedData.Count());
             decimal previous = 999m;
@@ -224,7 +224,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -245,7 +245,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
             // assert
             Assert.AreEqual(4, selectedData.Count());
             DateTime previous = DateTime.MaxValue;
@@ -265,7 +265,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -286,7 +286,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
             // assert
             Assert.AreEqual(4, selectedData.Count());
             bool previous = true;
@@ -306,7 +306,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
@@ -333,7 +333,7 @@ namespace RestParserTests
             expected.Add(p => p.Id > 0);
 
             // act
-            IQueryable<TestItem> selectedData = parser.Run(this.data, rest);
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
 
             // assert
             Assert.AreEqual(4, selectedData.Count());

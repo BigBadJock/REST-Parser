@@ -11,6 +11,6 @@ namespace REST_Parser
     {
         RestResult<T> Parse(string request);
 
-        IQueryable<T> Run(IQueryable<T> source, string rest);
+        RestResult<T> Run(IQueryable<T> source, string rest);
     }
 }
