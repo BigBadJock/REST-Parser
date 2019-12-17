@@ -3,11 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>REST_Parser</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>SilverCode Solutions Ltd</Copyright>
+    <PackageProjectUrl>https://github.com/BigBadJock/REST-Parser</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/BigBadJock/REST-Parser</RepositoryUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Ninject" Version="3.3.4" />
-    <PackageReference Include="ninject.extensions.conventions" Version="3.3.0" />
-  </ItemGroup>
 
 </Project>
