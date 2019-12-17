@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace REST_Parser
 {
-    public class RestToLinqParser<T> : IRestParser<T>
+    public class RestToLinqParser<T> : IRestToLinqParser<T>
     {
         List<Expression<Func<T, bool>>> expressions = new List<Expression<Func<T, bool>>>();
         private IStringExpressionGenerator<T> stringExpressionGenerator;
