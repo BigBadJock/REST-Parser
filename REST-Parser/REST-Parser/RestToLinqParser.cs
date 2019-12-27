@@ -31,26 +31,29 @@ namespace REST_Parser
         public RestResult<T> Parse(string request)
         {
             RestResult<T> result = new RestResult<T>();
-            List<Expression<Func<T, bool>>> linqConditions = new List<Expression<Func<T, bool>>>();
-            List<SortBy<T>> sortOrder = new List<SortBy<T>>();
-            string[] conditions = GetConditions(request);
-            foreach (string condition in conditions)
+            if (!string.IsNullOrWhiteSpace(request))
             {
-                if (isSortCondition(condition))
+                List<Expression<Func<T, bool>>> linqConditions = new List<Expression<Func<T, bool>>>();
+                List<SortBy<T>> sortOrder = new List<SortBy<T>>();
+                string[] conditions = GetConditions(request);
+                foreach (string condition in conditions)
                 {
-                    sortOrder.Add(parseSortCondition(condition));
+                    if (isSortCondition(condition))
+                    {
+                        sortOrder.Add(parseSortCondition(condition));
+                    }
+                    else if (isPageCondition(condition))
+                    {
+                        result = parsePageCondition(result, condition);
+                    }
+                    else
+                    {
+                        linqConditions.Add(parseCondition(condition));
+                    }
                 }
-                else if (isPageCondition(condition))
-                {
-                    result = parsePageCondition(result, condition);
-                }
-                else
-                {
-                    linqConditions.Add(parseCondition(condition));
-                }
+                result.Expressions = linqConditions;
+                result.SortOrder = sortOrder;
             }
-            result.Expressions = linqConditions;
-            result.SortOrder = sortOrder;
             return result;
         }
 
@@ -107,6 +110,7 @@ namespace REST_Parser
 
         private Expression<Func<T, bool>> parseCondition(string condition)
         {
+            if (string.IsNullOrWhiteSpace(condition)) return null;
             string field = string.Empty;
             string value = string.Empty;
             string restOperator = string.Empty;
@@ -179,37 +183,44 @@ namespace REST_Parser
 
             IQueryable<T> selectedData = source;
             IOrderedQueryable<T> orderedData = null;
-            restResult.Expressions.ForEach(delegate (Expression<Func<T, bool>> where) {
-                selectedData = selectedData.Where(where);
-            });
-            bool firstSort = true;
-            restResult.SortOrder.ForEach(delegate (SortBy<T> sortBy)
+            if (restResult.Expressions != null)
             {
-                if (firstSort)
+                restResult.Expressions.ForEach(delegate (Expression<Func<T, bool>> where)
                 {
-                    if (sortBy.Ascending)
+                    selectedData = selectedData.Where(where);
+                });
+            }
+            bool firstSort = true;
+            if (restResult.SortOrder != null)
+            {
+                restResult.SortOrder.ForEach(delegate (SortBy<T> sortBy)
+                {
+                    if (firstSort)
                     {
-                        orderedData = selectedData.OrderBy<T, object>(sortBy.Expression);
+                        if (sortBy.Ascending)
+                        {
+                            orderedData = selectedData.OrderBy<T, object>(sortBy.Expression);
+                        }
+                        else
+                        {
+                            orderedData = selectedData.OrderByDescending<T, object>(sortBy.Expression);
+                        }
+                        firstSort = false;
                     }
                     else
                     {
-                        orderedData = selectedData.OrderByDescending<T, object>(sortBy.Expression);
+                        if (sortBy.Ascending)
+                        {
+                            orderedData = orderedData.ThenBy<T, object>(sortBy.Expression);
+                        }
+                        else
+                        {
+                            orderedData = orderedData.ThenByDescending<T, object>(sortBy.Expression);
+                        }
                     }
-                    firstSort = false;
-                }
-                else
-                {
-                    if (sortBy.Ascending)
-                    {
-                        orderedData = orderedData.ThenBy<T, object>(sortBy.Expression);
-                    }
-                    else
-                    {
-                        orderedData = orderedData.ThenByDescending<T, object>(sortBy.Expression);
-                    }
-                }
 
-            });
+                });
+            }
             if (!firstSort)
             {
 

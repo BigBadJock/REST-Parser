@@ -48,6 +48,7 @@ namespace RestParserTests
         [DataRow("firstname[eq]=James&$sort_by[desc]=amount", 2)]
         [DataRow("$sort_by[desc]=amount&$pageSize=2&$page=2", 2)]
         [DataRow("$sort_by[asc]=birthday&$pageSize=3&$page=2", 1)]
+        [DataRow("",4)]
         public void FullTest(string rest, int expectedCount)
         {
             // arrange
