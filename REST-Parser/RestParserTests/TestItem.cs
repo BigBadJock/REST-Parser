@@ -12,5 +12,11 @@ namespace RestParserTests
         public decimal Rate { get; set; }
         public DateTime Birthday { get; set; }
         public bool Flag { get; set; }
+        public string? MiddleName { get; set; }
+        public int? OrderCount { get; set; }
+        public double? OrderWeight { get; set; }
+        public decimal? OrderCost { get; set; }
+        public double? Delivered { get; set; }
+        public DateTime? MarriageDate { get; set; }
     }
 }

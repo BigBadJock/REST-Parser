@@ -16,33 +16,25 @@ namespace REST_Parser.ExpressionGenerators
             try
             {
                 decimal v = decimal.Parse(value);
+                Type paramType = Expression.PropertyOrField(parameter, field).Type;
+                MemberExpression member = Expression.PropertyOrField(parameter, field);
+                ConstantExpression constantExpression = Expression.Constant(v);
+                var conversion = Expression.Convert(constantExpression, paramType);
 
                 switch (restOperator)
                 {
                     case "eq":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
+                        return Expression.Lambda<Func<T, bool>>(Expression.Equal(member, conversion), parameter);
                     case "ne":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.NotEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
+                        return Expression.Lambda<Func<T, bool>>(Expression.NotEqual(member, conversion), parameter);
                     case "gt":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.GreaterThan(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
+                        return Expression.Lambda<Func<T, bool>>(Expression.GreaterThan(member, conversion), parameter);
                     case "ge":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.GreaterThanOrEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
+                        return Expression.Lambda<Func<T, bool>>(Expression.GreaterThanOrEqual(member, conversion), parameter);
                     case "lt":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.LessThan(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
+                        return Expression.Lambda<Func<T, bool>>(Expression.LessThan(member, conversion), parameter);
                     case "le":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.LessThanOrEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
+                        return Expression.Lambda<Func<T, bool>>(Expression.LessThanOrEqual(member, conversion), parameter);
                     default:
                         throw new REST_InvalidOperatorException(field, restOperator);
                 }

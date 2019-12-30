@@ -121,6 +121,12 @@ namespace REST_Parser
                 parameter = Expression.Parameter(typeof(T), "p");
                 GetCondition(condition, out field, out restOperator, out value);
                 paramType = Expression.PropertyOrField(parameter, field).Type;
+
+                if (Nullable.GetUnderlyingType(paramType) != null)
+                {
+                    paramType = Nullable.GetUnderlyingType(paramType);
+                }
+
             }
             catch (Exception)
             {
@@ -147,8 +153,6 @@ namespace REST_Parser
             }
 
             return null;
-
-
 
         }
 
@@ -187,6 +191,7 @@ namespace REST_Parser
             {
                 restResult.Expressions.ForEach(delegate (Expression<Func<T, bool>> where)
                 {
+                    if(where != null)
                     selectedData = selectedData.Where(where);
                 });
             }
