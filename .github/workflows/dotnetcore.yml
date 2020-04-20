@@ -26,9 +26,10 @@ jobs:
       run: dotnet test ./REST-Parser/REST-Parser.sln --no-restore --verbosity normal
     - name: Pack
       run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o finalpackage --no-build
-
-    - name: Publish artifact
-      uses: actions/upload-artifact@master
+    - name: Publish
+      uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
       with:
-        name: REST-Parser
-        path: finalpackage
+        nupkg-path:  './artifacts/*.nupkg'
+        repo-owner:  'bigbadjock'
+        gh-user:  'bigbadjock'
+        token:  ${{ secrets.GITHUB_TOKEN }}
