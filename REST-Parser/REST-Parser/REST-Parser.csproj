@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>REST_Parser</RootNamespace>
     <Authors>SilverCode Solutions Ltd</Authors>
     <Company>SilverCode Solutions Ltd</Company>
