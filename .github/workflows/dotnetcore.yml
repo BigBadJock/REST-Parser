@@ -23,3 +23,5 @@ jobs:
       run: dotnet build ./REST-Parser/REST-Parser.sln --configuration Release --no-restore
     - name: Test
       run: dotnet test ./REST-Parser/REST-Parser.sln --no-restore --verbosity normal
+    - name: Pack
+      run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o finalpackage --no-build
