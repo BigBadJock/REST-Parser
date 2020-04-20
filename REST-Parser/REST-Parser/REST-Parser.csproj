@@ -6,13 +6,15 @@
     <Authors>SilverCode Solutions Ltd</Authors>
     <Company>SilverCode Solutions Ltd</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.8</Version>
+    <Version>1.0.9</Version>
     <Description>A parser that takes a REST query and converts it to LINQ statments, and can run those statements against a data source.</Description>
     <Copyright>2020</Copyright>
-    <PackageReleaseNotes>1.0.8 Updated project information
-1.0.7 Added nullables. issue with nullable string &amp; [contains]
-1.0.6 fixed issue with blank rest query
-1.0.3 added Dependency Injection</PackageReleaseNotes>
+    <PackageReleaseNotes>
+      1.0.9 - set default to EQ
+      1.0.8 Updated project information
+      1.0.7 Added nullables. issue with nullable string &amp; [contains]
+      1.0.6 fixed issue with blank rest query
+      1.0.3 added Dependency Injection</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/BigBadJock/REST-Parser</PackageProjectUrl>
     <RepositoryUrl>https://github.com/BigBadJock/REST-Parser</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
