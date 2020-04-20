@@ -28,5 +28,5 @@ jobs:
     - name: Publish artifact
       uses: actions/upload-artifact@master
       with:
-        name: nupkg
+        name: REST-Parser
         path: finalpackage
