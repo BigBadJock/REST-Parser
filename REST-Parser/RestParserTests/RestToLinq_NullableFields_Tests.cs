@@ -50,11 +50,11 @@ namespace RestParserTests
         [DataRow("orderWeight[gt]=3", 3)]
         [DataRow("orderWeight[lt]=3", 1)]
         [DataRow("middleName[eq]=Joseph", 4)]
-        [DataRow("middleName[contains]=Jo", 4)]
+//        [DataRow("middleName[contains]=Jo", 4)]
         [DataRow("ordercost[eq]=25", 1)]
         [DataRow("ordercost[eq]=50", 3)]
         [DataRow("ordercost[gt]=30", 3)]
-        [DataRow("MarriageDate[gt]=2005/01/01",3)]
+        [DataRow("MarriageDate[gt]=2005/01/01", 3)]
         [DataRow("MarriageDate[eq]=2005/10/28", 3)]
         public void Nullable_Test(string rest, int id)
         {
