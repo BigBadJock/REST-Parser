@@ -176,6 +176,7 @@ namespace REST_Parser
             }
             else
             {
+                restOperator = "eq"; // Default to equals
                 field = sides[0];
             }
             value = sides[1].Trim();

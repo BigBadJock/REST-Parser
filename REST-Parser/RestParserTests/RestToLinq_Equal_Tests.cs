@@ -45,6 +45,7 @@ namespace RestParserTests
         [DataRow("surname[eq]=Roberts", "Roberts")]
         [DataRow("surname[eq]=Smith", "Smith")]
         [DataRow("surname [eq] = Smith", "Smith")]
+        [DataRow("surname=Smith", "Smith")]
         public void EQ_String_Test(string rest, string surname )
         {
             // arrange
@@ -71,6 +72,7 @@ namespace RestParserTests
         [DataRow("surname[eq]=McArthur&firstname[eq]=John", "McArthur", "John")]
         [DataRow("surname[eq]=McArthur&firstname[eq]=James", "McArthur", "James")]
         [DataRow("surname [eq] = McArthur & firstname [eq] = James", "McArthur", "James")]
+        [DataRow("surname=McArthur&firstname=James", "McArthur", "James")]
         public void EQ_Multiple_Test(string rest, string surname, string firstname)
         {
             // arrange
@@ -97,6 +99,7 @@ namespace RestParserTests
         [DataTestMethod]
         [DataRow("amount[eq]=5", 5, "McArthur")]
         [DataRow("amount[eq]=7", 7, "Smith")]
+        [DataRow("amount=7",7, "Smith")]
         public void EQ_INT_Test(string rest, int amount, string surname)
         {
             // arrange
@@ -162,6 +165,7 @@ namespace RestParserTests
         [DataTestMethod]
         [DataRow("birthday[eq]=1968-01-01", "1968/01/01", 2)]
         [DataRow("birthday[eq]=1972-01-01", "1972/01/01", 4)]
+        [DataRow("birthday=1968-01-01", "1968/01/01", 2)]
         public void EQ_Date(string rest, string date, int id)
         {
             // arrange
@@ -186,6 +190,7 @@ namespace RestParserTests
         [DataTestMethod]
         [DataRow("price[eq]=5.25",5.25,2)]
         [DataRow("price[eq]=5.5", 5, 3)]
+        [DataRow("price=5.5", 5, 3)]
         public void EQ_Double(string rest, double price, int id)
         {
             // arrange
@@ -210,6 +215,7 @@ namespace RestParserTests
         [DataTestMethod]
         [DataRow("rate[eq]=2.1", 2.1, 1)]
         [DataRow("rate[eq]=2.3", 2.3, 3)]
+        [DataRow("rate=2.3", 2.3, 3)]
         // passing in doubles as mstest doesn't allow passing in of decimals 
         public void EQ_Decimal(string rest, double rate, int id)
         {
