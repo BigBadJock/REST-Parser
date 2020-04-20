@@ -13,6 +13,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      with:
+        nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+        nuget-version: latest
+    
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -25,6 +32,13 @@ jobs:
       run: dotnet test ./REST-Parser/REST-Parser.sln --no-restore --verbosity normal
     - name: Pack
       run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o finalpackage --no-build
+
+    - name: Add GPR Source
+      run: nuget sources Add -Name "GPR" -Source ${{ secrets. GPR_URI }} -UserName ${{ GPR_USERNAME }} -Password ${{ secrets.GITHUB_TOKEN }}
+ 
+    - name: Push to GitHub Packages
+      run: nuget push nupkg\*.nupkg -Source "GPR"
+
     - name: Publish artifact
       uses: actions/upload-artifact@master
       with:
