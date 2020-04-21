@@ -31,10 +31,4 @@ jobs:
       with: 
         name: REST-Parser
         path: finalpackage
-    - name: Push Nupkg to GitHub Packages
-      uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
-      with:
-        nupkg-path: './finalpackage/*.nupkg'
-        repo-owner: bigbadjock 
-        gh-user: bigbadjock
-        token: ${{ secrets.GITHUB_TOKEN }}
+
