@@ -127,6 +127,11 @@ namespace REST_Parser
                 GetCondition(condition, out field, out restOperator, out value);
                 paramType = Expression.PropertyOrField(parameter, field).Type;
 
+                if(paramType.IsGenericType && paramType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    paramType = Nullable.GetUnderlyingType(paramType);
+                }
+
                 if (Nullable.GetUnderlyingType(paramType) != null)
                 {
                     paramType = Nullable.GetUnderlyingType(paramType);

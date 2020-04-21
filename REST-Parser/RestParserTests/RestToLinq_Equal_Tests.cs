@@ -26,7 +26,7 @@ namespace RestParserTests
         public void Initialize()
         {
             List<TestItem> d1 = new List<TestItem>();
-            d1.Add(new TestItem { Id = 1, FirstName = "Bob", Surname = "Roberts", Amount = 4, Price = 4, Rate=2.1m, Birthday=Convert.ToDateTime("1966/01/01"), Flag=true});
+            d1.Add(new TestItem { Id = 1, FirstName = "Bob", MiddleName="Thomas", Surname = "Roberts", Amount = 4, Price = 4, Rate=2.1m, Birthday=Convert.ToDateTime("1966/01/01"), Flag=true});
             d1.Add(new TestItem { Id = 2, FirstName = "John", Surname = "McArthur", Amount = 5, Price = 5.25, Rate = 2.2m, Birthday = Convert.ToDateTime("1968/01/01"), Flag = false });
             d1.Add(new TestItem { Id = 3, FirstName = "James", Surname = "McArthur", Amount = 6, Price = 5.5, Rate = 2.3m, Birthday = Convert.ToDateTime("1970/01/01"), Flag = true });
             d1.Add(new TestItem { Id = 4, FirstName = "James", Surname = "Smith", Amount = 7, Price = 6.5, Rate = 2.4m, Birthday = Convert.ToDateTime("1972/01/01"), Flag = true });
@@ -66,6 +66,30 @@ namespace RestParserTests
 
             Assert.AreEqual(surname, first.Surname);
         }
+
+        [DataTestMethod]
+        [DataRow("middlename=Thomas", "Thomas")]
+        public void EQ_String_Some_Empty_Test(string rest, string middleName)
+        {
+            // arrange
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.MiddleName == middleName);
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse(rest).Expressions;
+
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where) {
+                selectedData = selectedData.Where(where);
+            });
+            TestItem first = selectedData.FirstOrDefault();
+            // assert
+            Assert.AreEqual(expected.Count, expressions.Count);
+            Assert.AreEqual(1, selectedData.Count());
+
+            Assert.AreEqual(middleName, first.MiddleName);
+        }
+
 
         [DataTestMethod]
         [DataRow("surname[eq]=Smith&firstname[eq]=James", "Smith", "James")]

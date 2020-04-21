@@ -6,10 +6,11 @@
     <Authors>SilverCode Solutions Ltd</Authors>
     <Company>SilverCode Solutions Ltd</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.9</Version>
+    <Version>1.0.11</Version>
     <Description>A parser that takes a REST query and converts it to LINQ statments, and can run those statements against a data source.</Description>
     <Copyright>2020</Copyright>
-    <PackageReleaseNotes>
+    <PackageReleaseNotes>1.0.11 - Fix string contains on nullable field
+      1.0.10 - Fix default sort order
       1.0.9 - set default to EQ
       1.0.8 Updated project information
       1.0.7 Added nullables. issue with nullable string &amp; [contains]
@@ -19,8 +20,8 @@
     <RepositoryUrl>https://github.com/BigBadJock/REST-Parser</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>REST, LINQ</PackageTags>
-    <AssemblyVersion>1.0.8.0</AssemblyVersion>
-    <FileVersion>1.0.8.0</FileVersion>
+    <AssemblyVersion>1.0.11.0</AssemblyVersion>
+    <FileVersion>1.0.11.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

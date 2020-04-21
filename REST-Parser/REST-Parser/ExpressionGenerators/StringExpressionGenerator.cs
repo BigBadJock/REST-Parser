@@ -47,15 +47,10 @@ namespace REST_Parser.ExpressionGenerators
             UnaryExpression conversion = Expression.Convert(constantExpression, paramType);
             MethodInfo method = paramType.GetMethod("Contains", new[] { paramType });
             var containsMethodExp = Expression.Call(property, method, conversion);
-            return Expression.Lambda<Func<T, bool>>(containsMethodExp, parameter);
-
-            //Expression property = Expression.Property(parameter, field);
-            //ConstantExpression search = Expression.Constant(value, typeof(string));
-            //MethodInfo method = typeof(string).GetMethod("Contains", new[] { typeof(string) });
-            //var containsMethodExp = Expression.Call(property, method, search);
-            //return Expression.Lambda<Func<T, bool>>(containsMethodExp, parameter);
-
-
+            var nullCheck = Expression.NotEqual(property, Expression.Constant(null, typeof(object)));
+            var combined = Expression.AndAlso(nullCheck, containsMethodExp);
+            var containsExpression = Expression.Lambda<Func<T, bool>>(combined, parameter);
+            return containsExpression;
         }
     }
 }
