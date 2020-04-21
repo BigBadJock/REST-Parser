@@ -18,10 +18,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-        source-url: https://nuget.pkg.github.com/bigbadjock/index.json
-      env: 
-         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-     
     - name: Install dependencies
       run: dotnet restore ./REST-Parser/REST-Parser.sln
     - name: Build
@@ -29,9 +25,16 @@ jobs:
     - name: Test
       run: dotnet test ./REST-Parser/REST-Parser.sln --no-restore --verbosity normal
     - name: Pack
-      run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o out --no-build
-    - name: Add GPR source
-      run: dotnet nuget sources Add -Name "GPR" -Source ${{ secrets.GPR_URI }} -UserName {{ GPR_USERNAME }} -Password ${{ secrets.GITHUB_TOKEN }}
-    - name: Push generated package to GitHub registry
-      run: dotnet nuget push ./REST-Parser/out/*.nupkg  -Source "GPR" --skip-duplicate --no-symbols true
-
+      run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o finalpackage --no-build
+    - name: Publish
+      uses: actions/upload-artifact@v1.0.0
+      with: 
+        name: REST-Parser
+        path: finalpackage
+    - name: Push Nupkg to GitHub Packages
+      uses: tanaka-takayoshi/nuget-publish-to-github-packages-action@v2.1
+      with:
+        nupkg-path: './finalpackage/*.nupkg'
+        repo-owner: bigbadjock 
+        gh-user: bigbadjock
+        token: ${{ secrets.GITHUB_TOKEN }}
