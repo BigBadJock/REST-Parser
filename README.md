@@ -3,6 +3,9 @@ A C# Parser for REST requests generating Linq expressions
 
 ## Progress
 
+### 21/04/2020
+Fixed three issues including the \[contains\] on a nullable string.
+
 ### 30/12/2019
 Updated to handle nullable types. There is a remaining issue throwing an exception when using \[contains\] on a nullable string.
 
