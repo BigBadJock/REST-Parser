@@ -59,7 +59,7 @@ namespace RestParserTests
             // assert
             Assert.AreEqual(4, selectedData.Count());
             string previous = "";
-            selectedData.ToList<TestItem>().ForEach(delegate(TestItem testItem)
+            selectedData.ToList<TestItem>().ForEach(delegate (TestItem testItem)
             {
                 Assert.IsTrue(testItem.Surname.CompareTo(previous) > -1);
                 previous = testItem.Surname;
@@ -310,13 +310,13 @@ namespace RestParserTests
 
             // assert
             Assert.AreEqual(4, selectedData.Count());
-            string surname= "";
+            string surname = "";
             string firstname = "";
             selectedData.ToList<TestItem>().ForEach(delegate (TestItem testItem)
             {
-                if(testItem.Surname == surname)
+                if (testItem.Surname == surname)
                 {
-                    Assert.IsTrue(testItem.FirstName.CompareTo(firstname) > -1,"firstname should be greater");
+                    Assert.IsTrue(testItem.FirstName.CompareTo(firstname) > -1, "firstname should be greater");
                 }
                 Assert.IsTrue(testItem.Surname.CompareTo(surname) > -1, "Surname should be greater");
                 surname = testItem.Surname;
@@ -343,7 +343,7 @@ namespace RestParserTests
             {
                 if (testItem.Surname == surname)
                 {
-                    Assert.IsTrue(testItem.FirstName.CompareTo(firstname) <1, "firstname should be smaller");
+                    Assert.IsTrue(testItem.FirstName.CompareTo(firstname) < 1, "firstname should be smaller");
                 }
                 Assert.IsTrue(testItem.Surname.CompareTo(surname) > -1, "Surname should be greater");
                 surname = testItem.Surname;
@@ -351,5 +351,31 @@ namespace RestParserTests
             });
         }
 
+        [TestMethod]
+        public void SORT_Defaults_to_ASC()
+        {
+            // arrange
+            string rest = "$sort_by=surname&$sort_by=firstname";
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+
+            // act
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
+
+            // assert
+            Assert.AreEqual(4, selectedData.Count());
+            string surname = "";
+            string firstname = "";
+            selectedData.ToList<TestItem>().ForEach(delegate (TestItem testItem)
+            {
+                if (testItem.Surname == surname)
+                {
+                    Assert.IsTrue(testItem.FirstName.CompareTo(firstname) > -1, "firstname should be greater");
+                }
+                Assert.IsTrue(testItem.Surname.CompareTo(surname) > -1, "Surname should be greater");
+                surname = testItem.Surname;
+                firstname = testItem.FirstName;
+            });
+
+        }
     }
 }
