@@ -18,6 +18,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
+        source-url: https://nuget.pkg.github.com/bigbadjock/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}   key:  
     - name: Install dependencies
       run: dotnet restore ./REST-Parser/REST-Parser.sln
     - name: Build
@@ -25,10 +28,7 @@ jobs:
     - name: Test
       run: dotnet test ./REST-Parser/REST-Parser.sln --no-restore --verbosity normal
     - name: Pack
-      run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o finalpackage --no-build
-    - name: Publish
-      uses: actions/upload-artifact@v1.0.0
-      with: 
-        name: REST-Parser
-        path: finalpackage
+      run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o out --no-build
+    - name: Push generated package to GitHub registry
+      run: dotnet nuget push ./REST-Parser/out/*.nupkg --skip-duplicate --no-symbols true
 
