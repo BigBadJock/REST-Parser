@@ -31,7 +31,7 @@ jobs:
     - name: Pack
       run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o out --no-build
     - name: Add GPR source
-      run: nuget sources Add -Name "GPR" -Source ${{ secrets.GPR_URI }} -UserName {{ GPR_USERNAME }} -Password ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget sources Add -Name "GPR" -Source ${{ secrets.GPR_URI }} -UserName {{ GPR_USERNAME }} -Password ${{ secrets.GITHUB_TOKEN }}
     - name: Push generated package to GitHub registry
       run: dotnet nuget push ./REST-Parser/out/*.nupkg  -Source "GPR" --skip-duplicate --no-symbols true
 
