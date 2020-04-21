@@ -69,11 +69,11 @@ namespace REST_Parser
 
             GetCondition(condition, out p, out var ignore, out value);
 
-            if(p.ToUpper() == "$PAGE")
+            if (p.ToUpper() == "$PAGE")
             {
                 result.Page = int.Parse(value);
             }
-            if(p.ToUpper() == "$PAGESIZE")
+            if (p.ToUpper() == "$PAGESIZE")
             {
                 result.PageSize = int.Parse(value);
             }
@@ -90,6 +90,11 @@ namespace REST_Parser
 
             parameter = Expression.Parameter(typeof(T), "p");
             GetCondition(condition, out sort, out sortOrder, out field);
+
+            if (string.IsNullOrWhiteSpace(sortOrder))
+            {
+                sortOrder = "ASC";
+            }
 
             var expression = Expression.Lambda<Func<T, object>>(Expression.Convert(Expression.Property(parameter, field), typeof(object)), parameter);
 
@@ -134,6 +139,11 @@ namespace REST_Parser
 
             }
 
+            if (string.IsNullOrEmpty(restOperator))
+            {
+                restOperator = "eq";
+            }
+
             switch (Type.GetTypeCode(paramType))
             {
                 case TypeCode.String:
@@ -176,12 +186,11 @@ namespace REST_Parser
             }
             else
             {
-                restOperator = "eq"; // Default to equals
                 field = sides[0];
             }
             value = sides[1].Trim();
         }
-        
+
         public RestResult<T> Run(IQueryable<T> source, string rest)
         {
             RestResult<T> restResult = this.Parse(rest);
@@ -192,8 +201,8 @@ namespace REST_Parser
             {
                 restResult.Expressions.ForEach(delegate (Expression<Func<T, bool>> where)
                 {
-                    if(where != null)
-                    selectedData = selectedData.Where(where);
+                    if (where != null)
+                        selectedData = selectedData.Where(where);
                 });
             }
             bool firstSort = true;
@@ -230,7 +239,7 @@ namespace REST_Parser
             if (!firstSort)
             {
 
-                if(restResult.Page > 0 || restResult.PageSize > 0)
+                if (restResult.Page > 0 || restResult.PageSize > 0)
                 {
                     restResult.Page = restResult.Page == 0 ? 1 : restResult.Page;
                     restResult.PageSize = restResult.PageSize == 0 ? 25 : restResult.PageSize;
