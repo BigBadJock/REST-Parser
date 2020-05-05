@@ -59,7 +59,7 @@ namespace REST_Parser
 
         private bool isPageCondition(string condition)
         {
-            return condition.Contains("$page");
+            return condition.ToUpper().Contains("$PAGE");
         }
 
         private RestResult<T> parsePageCondition(RestResult<T> result, string condition)
@@ -103,7 +103,7 @@ namespace REST_Parser
 
         private bool isSortCondition(string condition)
         {
-            return condition.Contains("$sort_by");
+            return condition.ToUpper().Contains("$SORT_BY");
         }
 
         protected internal string[] GetConditions(string request)
