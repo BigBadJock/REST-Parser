@@ -30,9 +30,9 @@ namespace RestParserTests
 
             List<TestItem> d1 = new List<TestItem>();
             d1.Add(new TestItem { Id = 1, FirstName = "Bob", MiddleName="Thomas", Surname = "Roberts", Amount = 4, Price = 4, Rate=2.1m, Birthday=Convert.ToDateTime("1966/01/01"), Flag=true, GuidId= guidId1 });
-            d1.Add(new TestItem { Id = 2, FirstName = "John", Surname = "McArthur", Amount = 5, Price = 5.25, Rate = 2.2m, Birthday = Convert.ToDateTime("1968/01/01"), Flag = false });
-            d1.Add(new TestItem { Id = 3, FirstName = "James", Surname = "McArthur", Amount = 6, Price = 5.5, Rate = 2.3m, Birthday = Convert.ToDateTime("1970/01/01"), Flag = true });
-            d1.Add(new TestItem { Id = 4, FirstName = "James", Surname = "Smith", Amount = 7, Price = 6.5, Rate = 2.4m, Birthday = Convert.ToDateTime("1972/01/01"), Flag = true });
+            d1.Add(new TestItem { Id = 2, FirstName = "John", Surname = "McArthur", Amount = 5, Price = 5.25, Rate = 2.2m, Birthday = Convert.ToDateTime("1968/01/01"), Flag = false, GuidId = Guid.NewGuid() });
+            d1.Add(new TestItem { Id = 3, FirstName = "James", Surname = "McArthur", Amount = 6, Price = 5.5, Rate = 2.3m, Birthday = Convert.ToDateTime("1970/01/01"), Flag = true, GuidId = Guid.NewGuid() });
+            d1.Add(new TestItem { Id = 4, FirstName = "James", Surname = "Smith", Amount = 7, Price = 6.5, Rate = 2.4m, Birthday = Convert.ToDateTime("1972/01/01"), Flag = true, GuidId = Guid.NewGuid() });
             this.data = d1.AsQueryable();
 
             this.stringExpressionGenerator = new StringExpressionGenerator<TestItem>();
