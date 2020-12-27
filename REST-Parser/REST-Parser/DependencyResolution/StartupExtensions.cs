@@ -19,6 +19,7 @@ namespace REST_Parser.DependencyResolution
             services.AddSingleton<IDoubleExpressionGenerator<T>, DoubleExpressionGenerator<T>>();
             services.AddSingleton<IIntExpressionGenerator<T>, IntExpressionGenerator<T>>();
             services.AddSingleton<IStringExpressionGenerator<T>, StringExpressionGenerator<T>>();
+            services.AddSingleton<IGuidExpressionGenerator<T>, GuidExpressionGenerator<T>>();
             services.AddSingleton<IRestToLinqParser<T>, RestToLinqParser<T>>();
         }
     }
