@@ -19,6 +19,8 @@ namespace RestParserTests
         private DoubleExpressionGenerator<TestItem> doubleExpressionGenerator;
         private DecimalExpressionGenerator<TestItem> decimalExpressionGenerator;
         private BooleanExpressionGenerator<TestItem> booleanExpressionGenerator;
+        private GuidExpressionGenerator<TestItem> guidExpressionGenerator;
+
         RestToLinqParser<TestItem> parser;
 
         [TestInitialize]
@@ -37,7 +39,8 @@ namespace RestParserTests
             this.doubleExpressionGenerator = new DoubleExpressionGenerator<TestItem>();
             this.decimalExpressionGenerator = new DecimalExpressionGenerator<TestItem>();
             this.booleanExpressionGenerator = new BooleanExpressionGenerator<TestItem>();
-            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator, doubleExpressionGenerator, decimalExpressionGenerator, booleanExpressionGenerator);
+            this.guidExpressionGenerator = new GuidExpressionGenerator<TestItem>();
+            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator, doubleExpressionGenerator, decimalExpressionGenerator, booleanExpressionGenerator, guidExpressionGenerator);
         }
 
         [TestMethod]

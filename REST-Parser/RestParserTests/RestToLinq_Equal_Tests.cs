@@ -20,13 +20,16 @@ namespace RestParserTests
         private DoubleExpressionGenerator<TestItem> doubleExpressionGenerator;
         private DecimalExpressionGenerator<TestItem> decimalExpressionGenerator;
         private BooleanExpressionGenerator<TestItem> booleanExpressionGenerator;
+        private GuidExpressionGenerator<TestItem> guidExpressionGenerator;
         RestToLinqParser<TestItem> parser;
+        Guid guidId1 = Guid.NewGuid();
 
         [TestInitialize]
         public void Initialize()
         {
+
             List<TestItem> d1 = new List<TestItem>();
-            d1.Add(new TestItem { Id = 1, FirstName = "Bob", MiddleName="Thomas", Surname = "Roberts", Amount = 4, Price = 4, Rate=2.1m, Birthday=Convert.ToDateTime("1966/01/01"), Flag=true});
+            d1.Add(new TestItem { Id = 1, FirstName = "Bob", MiddleName="Thomas", Surname = "Roberts", Amount = 4, Price = 4, Rate=2.1m, Birthday=Convert.ToDateTime("1966/01/01"), Flag=true, GuidId= guidId1 });
             d1.Add(new TestItem { Id = 2, FirstName = "John", Surname = "McArthur", Amount = 5, Price = 5.25, Rate = 2.2m, Birthday = Convert.ToDateTime("1968/01/01"), Flag = false });
             d1.Add(new TestItem { Id = 3, FirstName = "James", Surname = "McArthur", Amount = 6, Price = 5.5, Rate = 2.3m, Birthday = Convert.ToDateTime("1970/01/01"), Flag = true });
             d1.Add(new TestItem { Id = 4, FirstName = "James", Surname = "Smith", Amount = 7, Price = 6.5, Rate = 2.4m, Birthday = Convert.ToDateTime("1972/01/01"), Flag = true });
@@ -38,7 +41,8 @@ namespace RestParserTests
             this.doubleExpressionGenerator = new DoubleExpressionGenerator<TestItem>();
             this.decimalExpressionGenerator = new DecimalExpressionGenerator<TestItem>();
             this.booleanExpressionGenerator = new BooleanExpressionGenerator<TestItem>();
-            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator, doubleExpressionGenerator, decimalExpressionGenerator, booleanExpressionGenerator);
+            this.guidExpressionGenerator = new GuidExpressionGenerator<TestItem>();
+            this.parser = new RestToLinqParser<TestItem>(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator, doubleExpressionGenerator, decimalExpressionGenerator, booleanExpressionGenerator, guidExpressionGenerator);
         }
 
         [DataTestMethod]
@@ -305,6 +309,49 @@ namespace RestParserTests
 
             // assert
             Assert.AreEqual(1, count);
+        }
+
+        [TestMethod]
+        public void EQ_GUID_true()
+        {
+            //arrange 
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.GuidId == guidId1);
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("guidId[eq]=" + guidId1.ToString()).Expressions;
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where)
+            {
+                selectedData = selectedData.Where(where);
+            });
+
+            int count = selectedData.Count();
+
+            // assert
+            Assert.AreEqual(1, count);
+        }
+
+        [TestMethod]
+        public void EQ_GUID_false()
+        {
+            //arrange 
+            var nonMatchGuid = Guid.NewGuid();
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            expected.Add(p => p.GuidId == nonMatchGuid);
+
+            // act
+            List<Expression<Func<TestItem, bool>>> expressions = parser.Parse("guidId[eq]=" + nonMatchGuid.ToString()).Expressions;
+            IQueryable<TestItem> selectedData = data;
+            expressions.ForEach(delegate (Expression<Func<TestItem, bool>> where)
+            {
+                selectedData = selectedData.Where(where);
+            });
+
+            int count = selectedData.Count();
+
+            // assert
+            Assert.AreEqual(0, count);
         }
 
     }

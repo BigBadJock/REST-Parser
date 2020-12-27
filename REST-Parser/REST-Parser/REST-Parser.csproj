@@ -6,10 +6,10 @@
     <Authors>SilverCode Solutions Ltd</Authors>
     <Company>SilverCode Solutions Ltd</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.0.13</Version>
+    <Version>1.0.14</Version>
     <Description>A parser that takes a REST query and converts it to LINQ statments, and can run those statements against a data source.</Description>
     <Copyright>2020</Copyright>
-    <PackageReleaseNotes>
+    <PackageReleaseNotes>1.0.14 -add guid Parser
       1.0.13 - add toUpper() to check $page and $sort_by conditions
       1.0.12 - Update nuget packages
       1.0.11 - Fix string contains on nullable field
@@ -23,8 +23,8 @@
     <RepositoryUrl>https://github.com/BigBadJock/REST-Parser</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>REST, LINQ</PackageTags>
-    <AssemblyVersion>1.0.13.0</AssemblyVersion>
-    <FileVersion>1.0.13.0</FileVersion>
+    <AssemblyVersion>1.0.14.0</AssemblyVersion>
+    <FileVersion>1.0.14.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

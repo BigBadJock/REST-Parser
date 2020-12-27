@@ -17,8 +17,9 @@ namespace REST_Parser
         private IDoubleExpressionGenerator<T> doubleExpressionGenerator;
         private IDecimalExpressionGenerator<T> decimalExpressionGenerator;
         private IBooleanExpressionGenerator<T> booleanExpressionGenerator;
+        private IGuidExpressionGenerator<T> guidExpressionGenerator;
 
-        public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator)
+        public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator, IGuidExpressionGenerator<T> guidExpressionGenerator)
         {
             this.stringExpressionGenerator = stringExpressionGenerator;
             this.intExpressionGenerator = intExpressionGenerator;
@@ -26,6 +27,7 @@ namespace REST_Parser
             this.doubleExpressionGenerator = doubleExpressionGenerator;
             this.decimalExpressionGenerator = decimalExpressionGenerator;
             this.booleanExpressionGenerator = booleanExpressionGenerator;
+            this.guidExpressionGenerator = guidExpressionGenerator;
         }
 
         public RestResult<T> Parse(string request)
@@ -163,6 +165,12 @@ namespace REST_Parser
                     return this.decimalExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                 case TypeCode.Boolean:
                     return this.booleanExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                case TypeCode.Object:
+                    if(paramType == typeof(Guid))
+                    {
+                        return this.guidExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                    }
+                    break;
                 default:
                     break;
             }

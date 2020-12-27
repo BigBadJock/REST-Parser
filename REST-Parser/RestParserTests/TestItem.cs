@@ -18,5 +18,6 @@ namespace RestParserTests
         public decimal? OrderCost { get; set; }
         public double? Delivered { get; set; }
         public DateTime? MarriageDate { get; set; }
+        public Guid GuidId { get; set; }
     }
 }
