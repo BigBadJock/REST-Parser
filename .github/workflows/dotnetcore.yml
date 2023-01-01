@@ -1,10 +1,10 @@
-name: .NET Core
+name: Build and publish Nuget package
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
