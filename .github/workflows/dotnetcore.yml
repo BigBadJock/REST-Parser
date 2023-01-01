@@ -1,10 +1,10 @@
-name: .NET Core
+name: Build and publish Nuget package
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 7.0.x
     - name: Install dependencies
       run: dotnet restore ./REST-Parser/REST-Parser.sln
     - name: Build
