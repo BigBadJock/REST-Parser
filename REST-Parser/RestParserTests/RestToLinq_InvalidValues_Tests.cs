@@ -5,11 +5,7 @@ using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Linq.Expressions;
-using REST_Parser.Exceptions;
 
 namespace RestParserTests
 {
