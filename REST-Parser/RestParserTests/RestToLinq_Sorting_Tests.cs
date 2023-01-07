@@ -2,13 +2,10 @@
 using REST_Parser;
 using REST_Parser.ExpressionGenerators;
 using REST_Parser.ExpressionGenerators.Interfaces;
-using REST_Parser.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestParserTests
 {
@@ -376,6 +373,32 @@ namespace RestParserTests
                 Assert.IsTrue(testItem.Surname.CompareTo(surname) > -1, "Surname should be greater");
                 surname = testItem.Surname;
                 firstname = testItem.FirstName;
+            });
+        }
+
+
+        [TestMethod]
+        public void SORT_NoSortOrder_Defaults_To_ID()
+        {
+            // arrange
+            string rest = "";
+            List<Expression<Func<TestItem, bool>>> expected = new List<Expression<Func<TestItem, bool>>>();
+            var t0 = new TestItem { Id = 0, FirstName = "Bob", Surname = "Roberts", Amount = 4, Price = 4, Rate = 2.1m, Birthday = Convert.ToDateTime("1966/01/01"), Flag = true };
+            var d1 = data.ToList<TestItem>();
+            d1.Add(t0);
+            this.data = d1.AsQueryable();
+
+            // act
+            IQueryable<TestItem> selectedData = parser.Run(this.data, rest).Data;
+
+            // assert
+            int id = -1;
+            Assert.AreEqual(5, selectedData.Count());
+            Assert.AreEqual(0, selectedData.First().Id);
+            selectedData.ToList<TestItem>().ForEach(delegate (TestItem testItem)
+            {
+                Assert.IsTrue(testItem.Id.CompareTo(id) > -1, "Id should be greater");
+                id = testItem.Id;
             });
 
         }

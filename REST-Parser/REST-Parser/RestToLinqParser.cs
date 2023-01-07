@@ -53,8 +53,21 @@ namespace REST_Parser
                         linqConditions.Add(parseCondition(condition));
                     }
                 }
+
+                if (sortOrder.Count == 0)
+                {
+                    sortOrder.Add(parseSortCondition("$sort_by=Id"));
+                }
+
                 result.Expressions = linqConditions;
                 result.SortOrder = sortOrder;
+            }
+            else
+            {
+                List<SortBy<T>> sortOrder = new List<SortBy<T>>();
+                sortOrder.Add(parseSortCondition("$sort_by=Id"));
+                result.SortOrder = sortOrder;
+
             }
             return result;
         }
@@ -129,7 +142,7 @@ namespace REST_Parser
                 GetCondition(condition, out field, out restOperator, out value);
                 paramType = Expression.PropertyOrField(parameter, field).Type;
 
-                if(paramType.IsGenericType && paramType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                if (paramType.IsGenericType && paramType.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
                     paramType = Nullable.GetUnderlyingType(paramType);
                 }
@@ -166,7 +179,7 @@ namespace REST_Parser
                 case TypeCode.Boolean:
                     return this.booleanExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                 case TypeCode.Object:
-                    if(paramType == typeof(Guid))
+                    if (paramType == typeof(Guid))
                     {
                         return this.guidExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     }
