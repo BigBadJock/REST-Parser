@@ -1,11 +1,7 @@
 ﻿using REST_Parser.Exceptions;
 using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace REST_Parser.ExpressionGenerators
 {
@@ -17,27 +13,47 @@ namespace REST_Parser.ExpressionGenerators
             {
                 bool v = bool.Parse(value);
 
-                switch (restOperator)
+                var property = Expression.PropertyOrField(parameter, field);
+                var propertyType = property.Type;
+                Expression expression;
+
+                if (propertyType == typeof(bool?))
                 {
-                    case "eq":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.Equal(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
-                    case "ne":
-                        return Expression.Lambda<Func<T, bool>>(
-                            Expression.NotEqual(Expression.PropertyOrField(parameter, field), Expression.Constant(v)),
-                            parameter);
-                    default:
-                        throw new REST_InvalidOperatorException(field, restOperator);
+                    expression = Expression.Equal(property, Expression.Constant(v, typeof(bool?)));
+
+                    switch (restOperator)
+                    {
+                        case "eq":
+                            return Expression.Lambda<Func<T, bool>>(expression, parameter);
+                        case "ne":
+                            return Expression.Lambda<Func<T, bool>>(Expression.Not(expression), parameter);
+                        default:
+                            throw new REST_InvalidOperatorException(field, restOperator);
+                    }
                 }
+                else if (propertyType == typeof(bool))
+                {
+                    expression = Expression.Equal(property, Expression.Constant(v));
+                    switch (restOperator)
+                    {
+                        case "eq":
+                            return Expression.Lambda<Func<T, bool>>(expression, parameter);
+                        case "ne":
+                            return Expression.Lambda<Func<T, bool>>(Expression.Not(expression), parameter);
+                        default:
+                            throw new REST_InvalidOperatorException(field, restOperator);
+                    }
+                }
+                throw new Exception();
             }
             catch (REST_InvalidOperatorException ex)
             {
                 throw ex;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new REST_InvalidValueException( field, value);
+                Console.WriteLine(ex.Message);
+                throw new REST_InvalidValueException(field, value);
             }
         }
     }
