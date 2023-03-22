@@ -6,7 +6,7 @@
     <Authors>John McArthur</Authors>
     <Company>John McArthur</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.2</Version>
+    <Version>1.2.3</Version>
     <Description>A parser that takes a REST query and converts it to LINQ statments, and can run those statements against a data source.</Description>
     <Copyright>2023</Copyright>
     <PackageReleaseNotes>
