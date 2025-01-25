@@ -17,7 +17,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 7.0.x
+        dotnet-version: 9.0.x
     - name: Install dependencies
       run: dotnet restore ./REST-Parser/REST-Parser.sln
     - name: Build
@@ -27,7 +27,7 @@ jobs:
     - name: Pack
       run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o finalpackage --no-build
     - name: Publish
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v4.0.0
       with: 
         name: REST-Parser
         path: finalpackage
