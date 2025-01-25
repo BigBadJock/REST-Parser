@@ -6,9 +6,9 @@
     <Authors>John McArthur</Authors>
     <Company>John McArthur</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.4</Version>
+    <Version>1.2.5</Version>
     <Description>A parser that takes a REST query and converts it to LINQ statments, and can run those statements against a data source.</Description>
-    <Copyright>2023</Copyright>
+    <Copyright>2025</Copyright>
     <PackageReleaseNotes>
       1.2.4 - update packages
       1.2.3 - Fix issue with nullable booleans
@@ -31,8 +31,8 @@
     <RepositoryUrl>https://github.com/BigBadJock/REST-Parser</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>REST, LINQ</PackageTags>
-    <AssemblyVersion>1.2.2</AssemblyVersion>
-    <FileVersion>1.2.2</FileVersion>
+    <AssemblyVersion>1.2.5</AssemblyVersion>
+    <FileVersion>1.2.5</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
