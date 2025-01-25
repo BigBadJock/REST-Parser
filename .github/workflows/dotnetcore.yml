@@ -27,7 +27,7 @@ jobs:
     - name: Pack
       run: dotnet pack ./REST-Parser/REST-Parser.sln --configuration Release -o finalpackage --no-build
     - name: Publish
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v4.0.0
       with: 
         name: REST-Parser
         path: finalpackage
