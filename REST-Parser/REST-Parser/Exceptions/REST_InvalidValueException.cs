@@ -15,5 +15,9 @@ namespace REST_Parser.Exceptions
         public REST_InvalidValueException(string fieldname, string value) : base(string.Format("The REST request contained an invalid value ({1}) for field ({0})", fieldname, value))
         {
         }
+
+        public REST_InvalidValueException(string fieldname, string value, Exception innerException) : base(string.Format("The REST request contained an invalid value ({1}) for field ({0})", fieldname, value), innerException)
+        {
+        }
     }
 }

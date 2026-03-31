@@ -10,7 +10,14 @@ namespace REST_Parser
 {
     public class RestToLinqParser<T> : IRestToLinqParser<T>
     {
-        List<Expression<Func<T, bool>>> expressions = new List<Expression<Func<T, bool>>>();
+        private const int MAX_PAGE_SIZE = 1000;
+        private const int MAX_CONDITIONS = 50;
+        private const int MAX_QUERY_LENGTH = 2000;
+        private const string PAGE_PARAM = "$PAGE";
+        private const string PAGESIZE_PARAM = "$PAGESIZE";
+        private const string ASC_ORDER = "ASC";
+        private const string DESC_ORDER = "DESC";
+
         private IStringExpressionGenerator<T> stringExpressionGenerator;
         private IIntExpressionGenerator<T> intExpressionGenerator;
         private IDateExpressionGenerator<T> dateExpressionGenerator;
@@ -32,31 +39,43 @@ namespace REST_Parser
 
         public RestResult<T> Parse(string request)
         {
+            if (request != null && request.Length > MAX_QUERY_LENGTH)
+            {
+                throw new ArgumentException($"Query exceeds maximum length of {MAX_QUERY_LENGTH}");
+            }
+
             RestResult<T> result = new RestResult<T>();
             if (!string.IsNullOrWhiteSpace(request))
             {
                 List<Expression<Func<T, bool>>> linqConditions = new List<Expression<Func<T, bool>>>();
                 List<SortBy<T>> sortOrder = new List<SortBy<T>>();
                 string[] conditions = GetConditions(request);
+
+                if (conditions.Length > MAX_CONDITIONS)
+                {
+                    throw new ArgumentException($"Query exceeds maximum of {MAX_CONDITIONS} conditions");
+                }
+
                 foreach (string condition in conditions)
                 {
-                    if (isSortCondition(condition))
+                    if (IsSortCondition(condition))
                     {
-                        sortOrder.Add(parseSortCondition(condition));
+                        sortOrder.Add(ParseSortCondition(condition));
                     }
-                    else if (isPageCondition(condition))
+                    else if (IsPageCondition(condition))
+                    else if (IsPageCondition(condition))
                     {
-                        result = parsePageCondition(result, condition);
+                        result = ParsePageCondition(result, condition);                        result = ParsePageCondition(result, condition);
                     }
                     else
                     {
-                        linqConditions.Add(parseCondition(condition));
+                        linqConditions.Add(ParseCondition(condition));
                     }
                 }
 
                 if (sortOrder.Count == 0)
                 {
-                    sortOrder.Add(parseSortCondition("$sort_by=Id"));
+                    sortOrder.Add(ParseSortCondition("$sort_by=Id"));
                 }
 
                 result.Expressions = linqConditions;
@@ -65,38 +84,47 @@ namespace REST_Parser
             else
             {
                 List<SortBy<T>> sortOrder = new List<SortBy<T>>();
-                sortOrder.Add(parseSortCondition("$sort_by=Id"));
+                sortOrder.Add(ParseSortCondition("$sort_by=Id"));
                 result.SortOrder = sortOrder;
 
             }
             return result;
         }
 
-        private bool isPageCondition(string condition)
+        private bool IsPageCondition(string condition)        private bool IsPageCondition(string condition)
         {
             return condition.ToUpper().Contains("$PAGE");
         }
 
-        private RestResult<T> parsePageCondition(RestResult<T> result, string condition)
+        private RestResult<T> ParsePageCondition(RestResult<T> result, string condition)
         {
             string p = string.Empty;
             string value = string.Empty;
 
             GetCondition(condition, out p, out var ignore, out value);
 
-            if (p.ToUpper() == "$PAGE")
+            string upperParam = p.ToUpper();
+            if (upperParam == PAGE_PARAM)
             {
-                result.Page = int.Parse(value);
+                if (!int.TryParse(value, out int pageValue) || pageValue < 1)
+                {
+                    throw new REST_InvalidValueException(p, value);
+                }
+                result.Page = pageValue;
             }
-            if (p.ToUpper() == "$PAGESIZE")
+            else if (upperParam == PAGESIZE_PARAM)
             {
-                result.PageSize = int.Parse(value);
+                if (!int.TryParse(value, out int pageSizeValue) || pageSizeValue < 1)
+                {
+                    throw new REST_InvalidValueException(p, value);
+                }
+                result.PageSize = pageSizeValue > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSizeValue;
             }
             return result;
 
         }
 
-        private SortBy<T> parseSortCondition(string condition)
+        private SortBy<T> ParseSortCondition(string condition)        private SortBy<T> ParseSortCondition(string condition)
         {
             string sort = string.Empty;
             string sortOrder = string.Empty;
@@ -108,15 +136,15 @@ namespace REST_Parser
 
             if (string.IsNullOrWhiteSpace(sortOrder))
             {
-                sortOrder = "ASC";
+                sortOrder = ASC_ORDER;
             }
 
             var expression = Expression.Lambda<Func<T, object>>(Expression.Convert(Expression.Property(parameter, field), typeof(object)), parameter);
 
-            return new SortBy<T> { Expression = expression, Ascending = (sortOrder.ToUpper() == "ASC") };
+            return new SortBy<T> { Expression = expression, Ascending = (sortOrder.ToUpper() == ASC_ORDER) };
         }
 
-        private bool isSortCondition(string condition)
+        private bool IsSortCondition(string condition)        private bool IsSortCondition(string condition)
         {
             return condition.ToUpper().Contains("$SORT_BY");
         }
@@ -128,7 +156,7 @@ namespace REST_Parser
             return conditions;
         }
 
-        private Expression<Func<T, bool>> parseCondition(string condition)
+        private Expression<Func<T, bool>> ParseCondition(string condition)
         {
             if (string.IsNullOrWhiteSpace(condition)) return null;
             string field = string.Empty;
@@ -153,9 +181,9 @@ namespace REST_Parser
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new REST_InvalidFieldnameException(field);
+                throw new REST_InvalidFieldnameException(field, ex);
 
             }
 
@@ -203,7 +231,14 @@ namespace REST_Parser
 
         protected internal void GetCondition(string condition, out string field, out string restOperator, out string value)
         {
+            ArgumentNullException.ThrowIfNull(condition);
+
             string[] sides = condition.Split('=');
+            if (sides.Length < 2)
+            {
+                throw new ArgumentException($"Invalid condition format: {condition}");
+            }
+
             restOperator = "";
             if (sides[0].Contains("["))
             {
@@ -212,7 +247,7 @@ namespace REST_Parser
             }
             else
             {
-                field = sides[0];
+                field = sides[0].Trim();
             }
             value = sides[1].Trim();
         }

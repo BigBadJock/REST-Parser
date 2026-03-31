@@ -29,13 +29,13 @@ namespace REST_Parser.ExpressionGenerators
                         throw new REST_InvalidOperatorException(field, restOperator);
                 }
             }
-            catch(REST_InvalidOperatorException ex)
+            catch(REST_InvalidOperatorException)
             {
-                throw ex;
+                throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new REST_InvalidFieldnameException(string.Format("field={0} value={1}", field, value));
+                throw new REST_InvalidFieldnameException($"field={field} value={value}", ex);
             }
         }
 

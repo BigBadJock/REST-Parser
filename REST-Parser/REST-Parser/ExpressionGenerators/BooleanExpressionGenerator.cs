@@ -46,14 +46,13 @@ namespace REST_Parser.ExpressionGenerators
                 }
                 throw new Exception();
             }
-            catch (REST_InvalidOperatorException ex)
+            catch (REST_InvalidOperatorException)
             {
-                throw ex;
+                throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw new REST_InvalidValueException(field, value);
+                throw new REST_InvalidValueException(field, value, ex);
             }
         }
     }

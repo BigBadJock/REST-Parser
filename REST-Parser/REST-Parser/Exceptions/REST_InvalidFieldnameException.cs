@@ -17,5 +17,10 @@ namespace REST_Parser.Exceptions
         {
 
         }
+
+        public REST_InvalidFieldnameException(string fieldname, Exception innerException) : base(string.Format("The REST request contained an invalid field name: {0}", fieldname), innerException)
+        {
+
+        }
     }
 }
