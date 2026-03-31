@@ -8,6 +8,11 @@ using System.Linq.Expressions;
 
 namespace REST_Parser
 {
+    /// <summary>
+    /// Implementation of <see cref="IRestToLinqParser{T}"/> that parses REST query strings and converts them into LINQ expressions.
+    /// Supports filtering, sorting, and pagination with security limits.
+    /// </summary>
+    /// <typeparam name="T">The entity type to query against.</typeparam>
     public class RestToLinqParser<T> : IRestToLinqParser<T>
     {
         private const int MAX_PAGE_SIZE = 1000;
@@ -26,6 +31,16 @@ namespace REST_Parser
         private IBooleanExpressionGenerator<T> booleanExpressionGenerator;
         private IGuidExpressionGenerator<T> guidExpressionGenerator;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class.
+        /// </summary>
+        /// <param name="stringExpressionGenerator">Generator for string field expressions.</param>
+        /// <param name="intExpressionGenerator">Generator for integer field expressions.</param>
+        /// <param name="dateExpressionGenerator">Generator for DateTime field expressions.</param>
+        /// <param name="doubleExpressionGenerator">Generator for double field expressions.</param>
+        /// <param name="decimalExpressionGenerator">Generator for decimal field expressions.</param>
+        /// <param name="booleanExpressionGenerator">Generator for boolean field expressions.</param>
+        /// <param name="guidExpressionGenerator">Generator for Guid field expressions.</param>
         public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator, IGuidExpressionGenerator<T> guidExpressionGenerator)
         {
             this.stringExpressionGenerator = stringExpressionGenerator;
@@ -37,6 +52,7 @@ namespace REST_Parser
             this.guidExpressionGenerator = guidExpressionGenerator;
         }
 
+        /// <inheritdoc/>
         public RestResult<T> Parse(string request)
         {
             if (request != null && request.Length > MAX_QUERY_LENGTH)
@@ -63,9 +79,8 @@ namespace REST_Parser
                         sortOrder.Add(ParseSortCondition(condition));
                     }
                     else if (IsPageCondition(condition))
-                    else if (IsPageCondition(condition))
                     {
-                        result = ParsePageCondition(result, condition);                        result = ParsePageCondition(result, condition);
+                        result = ParsePageCondition(result, condition);
                     }
                     else
                     {
@@ -91,7 +106,7 @@ namespace REST_Parser
             return result;
         }
 
-        private bool IsPageCondition(string condition)        private bool IsPageCondition(string condition)
+        private bool IsPageCondition(string condition)
         {
             return condition.ToUpper().Contains("$PAGE");
         }
@@ -124,7 +139,7 @@ namespace REST_Parser
 
         }
 
-        private SortBy<T> ParseSortCondition(string condition)        private SortBy<T> ParseSortCondition(string condition)
+        private SortBy<T> ParseSortCondition(string condition)
         {
             string sort = string.Empty;
             string sortOrder = string.Empty;
@@ -144,7 +159,7 @@ namespace REST_Parser
             return new SortBy<T> { Expression = expression, Ascending = (sortOrder.ToUpper() == ASC_ORDER) };
         }
 
-        private bool IsSortCondition(string condition)        private bool IsSortCondition(string condition)
+        private bool IsSortCondition(string condition)
         {
             return condition.ToUpper().Contains("$SORT_BY");
         }
@@ -252,6 +267,7 @@ namespace REST_Parser
             value = sides[1].Trim();
         }
 
+        /// <inheritdoc/>
         public RestResult<T> Run(IQueryable<T> source, string rest)
         {
             RestResult<T> restResult = this.Parse(rest);
