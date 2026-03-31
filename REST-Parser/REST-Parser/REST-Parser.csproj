@@ -6,15 +6,16 @@
     <Authors>John McArthur</Authors>
     <Company>John McArthur</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.2.5</Version>
+    <Version>1.3.0</Version>
     <Description>A parser that takes a REST query and converts it to LINQ statments, and can run those statements against a data source.</Description>
-    <Copyright>2025</Copyright>
+    <Copyright>2026</Copyright>
     <PackageReleaseNotes>
+      1.3.0 - upgrade to dotnet 10, various code improvements and optimizations
       1.2.4 - update packages
       1.2.3 - Fix issue with nullable booleans
       1.2.2 - Add Default Sort Order of ID - If No Id passed in
       1.2.0 - upgrade to dotnet 7
-      1.1.0 - upgrade to dotnet 6 
+      1.1.0 - upgrade to dotnet 6
       1.0.16 - add guid procressor to Dependency Injection
       1.0.15 -add further tests for GUID parser
       1.0.14 -add guid Parser
@@ -31,8 +32,6 @@
     <RepositoryUrl>https://github.com/BigBadJock/REST-Parser</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>REST, LINQ</PackageTags>
-    <AssemblyVersion>1.2.5</AssemblyVersion>
-    <FileVersion>1.2.5</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
