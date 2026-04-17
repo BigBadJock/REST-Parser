@@ -118,13 +118,13 @@ category=Electronics&price[lt]=1000&inStock[eq]=true
 #### Single Column
 ```
 $sort_by=name
-$sort_by=name[ASC]
-$sort_by=price[DESC]
+$sort_by[ASC]=name
+$sort_by[DESC]=price
 ```
 
 #### Multiple Columns
 ```
-category=Electronics&$sort_by=brand[ASC]&$sort_by=price[DESC]
+category=Electronics&$sort_by[ASC]=brand&$sort_by[DESC]=price
 ```
 
 **Note:** If no sort order is specified, results are sorted by `Id` ascending by default.
