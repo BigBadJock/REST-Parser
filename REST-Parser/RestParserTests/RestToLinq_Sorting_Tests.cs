@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using REST_Parser;
+using REST_Parser.Exceptions;
 using REST_Parser.ExpressionGenerators;
 using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
@@ -401,6 +402,89 @@ namespace RestParserTests
                 id = testItem.Id;
             });
 
+        }
+
+        [TestMethod]
+        public void SORT_NoSortOrder_With_No_Id_Does_Not_Add_Default_Sort()
+        {
+            // arrange
+            var noIdParser = CreateNoIdParser();
+
+            // act
+            var result = noIdParser.Parse("");
+
+            // assert
+            Assert.AreEqual(0, result.SortOrder.Count);
+        }
+
+        [TestMethod]
+        public void SORT_NoSortOrder_With_No_Id_Does_Not_Throw()
+        {
+            // arrange
+            var noIdParser = CreateNoIdParser();
+            var noIdData = GetNoIdData();
+
+            // act
+            var selectedData = noIdParser.Run(noIdData, "").Data;
+
+            // assert
+            Assert.AreEqual(3, selectedData.Count());
+        }
+
+        [TestMethod]
+        public void SORT_NoSortOrder_With_No_Id_Still_Applies_Pagination()
+        {
+            // arrange
+            var noIdParser = CreateNoIdParser();
+            var noIdData = GetNoIdData();
+
+            // act
+            var result = noIdParser.Run(noIdData, "$page=1&$pagesize=2");
+
+            // assert
+            Assert.AreEqual(2, result.Data.Count());
+            Assert.AreEqual(1, result.Page);
+            Assert.AreEqual(2, result.PageSize);
+            Assert.AreEqual(2, result.PageCount);
+            Assert.AreEqual(3, result.TotalCount);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(REST_InvalidFieldnameException))]
+        public void SORT_Invalid_Field_Throws_REST_InvalidFieldnameException()
+        {
+            // arrange
+            string rest = "$sort_by=doesNotExist";
+
+            // act
+            parser.Run(this.data, rest);
+        }
+
+        private static IQueryable<NoIdTestItem> GetNoIdData()
+        {
+            return new List<NoIdTestItem>
+            {
+                new NoIdTestItem { Name = "Bob" },
+                new NoIdTestItem { Name = "John" },
+                new NoIdTestItem { Name = "James" }
+            }.AsQueryable();
+        }
+
+        private static RestToLinqParser<NoIdTestItem> CreateNoIdParser()
+        {
+            return new RestToLinqParser<NoIdTestItem>(
+                new StringExpressionGenerator<NoIdTestItem>(),
+                new IntExpressionGenerator<NoIdTestItem>(),
+                new DateExpressionGenerator<NoIdTestItem>(),
+                new DoubleExpressionGenerator<NoIdTestItem>(),
+                new DecimalExpressionGenerator<NoIdTestItem>(),
+                new BooleanExpressionGenerator<NoIdTestItem>(),
+                new GuidExpressionGenerator<NoIdTestItem>());
+        }
+
+        private class NoIdTestItem
+        {
+            public string Name { get; set; }
         }
     }
 }

@@ -18,6 +18,7 @@ namespace REST_Parser
         private const int MAX_PAGE_SIZE = 1000;
         private const int MAX_CONDITIONS = 50;
         private const int MAX_QUERY_LENGTH = 2000;
+        private const string DEFAULT_SORT_FIELD = "Id";
         private const string PAGE_PARAM = "$PAGE";
         private const string PAGESIZE_PARAM = "$PAGESIZE";
         private const string ASC_ORDER = "ASC";
@@ -90,7 +91,7 @@ namespace REST_Parser
 
                 if (sortOrder.Count == 0)
                 {
-                    sortOrder.Add(ParseSortCondition("$sort_by=Id"));
+                    AddDefaultSortIfAvailable(sortOrder);
                 }
 
                 result.Expressions = linqConditions;
@@ -99,11 +100,29 @@ namespace REST_Parser
             else
             {
                 List<SortBy<T>> sortOrder = new List<SortBy<T>>();
-                sortOrder.Add(ParseSortCondition("$sort_by=Id"));
+                AddDefaultSortIfAvailable(sortOrder);
                 result.SortOrder = sortOrder;
 
             }
             return result;
+        }
+
+        private void AddDefaultSortIfAvailable(List<SortBy<T>> sortOrder)
+        {
+            string defaultSortField = GetDefaultSortField();
+            if (!string.IsNullOrWhiteSpace(defaultSortField))
+            {
+                sortOrder.Add(ParseSortCondition($"$sort_by={defaultSortField}"));
+            }
+        }
+
+        private string GetDefaultSortField()
+        {
+            var property = typeof(T)
+                .GetProperties()
+                .FirstOrDefault(p => string.Equals(p.Name, DEFAULT_SORT_FIELD, StringComparison.OrdinalIgnoreCase));
+
+            return property?.Name;
         }
 
         private bool IsPageCondition(string condition)
@@ -154,7 +173,15 @@ namespace REST_Parser
                 sortOrder = ASC_ORDER;
             }
 
-            var expression = Expression.Lambda<Func<T, object>>(Expression.Convert(Expression.Property(parameter, field), typeof(object)), parameter);
+            Expression<Func<T, object>> expression;
+            try
+            {
+                expression = Expression.Lambda<Func<T, object>>(Expression.Convert(Expression.Property(parameter, field), typeof(object)), parameter);
+            }
+            catch (Exception ex)
+            {
+                throw new REST_InvalidFieldnameException(field, ex);
+            }
 
             return new SortBy<T> { Expression = expression, Ascending = (sortOrder.ToUpper() == ASC_ORDER) };
         }
@@ -313,30 +340,25 @@ namespace REST_Parser
 
                 });
             }
-            if (!firstSort)
+
+            IQueryable<T> resultData = firstSort ? selectedData : orderedData;
+
+            if (restResult.Page > 0 || restResult.PageSize > 0)
             {
+                restResult.Page = restResult.Page == 0 ? 1 : restResult.Page;
+                restResult.PageSize = restResult.PageSize == 0 ? 25 : restResult.PageSize;
 
-                if (restResult.Page > 0 || restResult.PageSize > 0)
-                {
-                    restResult.Page = restResult.Page == 0 ? 1 : restResult.Page;
-                    restResult.PageSize = restResult.PageSize == 0 ? 25 : restResult.PageSize;
+                var totalCount = resultData.Count();
+                var pageCount = totalCount / restResult.PageSize;
+                if (pageCount * restResult.PageSize < totalCount) pageCount += 1;
+                if (restResult.Page > pageCount) restResult.Page = pageCount;
+                restResult.PageCount = pageCount;
+                restResult.TotalCount = totalCount;
 
-                    var totalCount = orderedData.Count();
-                    var pageCount = totalCount / restResult.PageSize;
-                    if (pageCount * restResult.PageSize < totalCount) pageCount += 1;
-                    if (restResult.Page > pageCount) restResult.Page = pageCount;
-                    restResult.PageCount = pageCount;
-                    restResult.TotalCount = totalCount;
-
-                    orderedData = (IOrderedQueryable<T>)orderedData.Skip(restResult.PageSize * (restResult.Page - 1)).Take(restResult.PageSize);
-                }
-
-                restResult.Data = orderedData;
+                resultData = resultData.Skip(restResult.PageSize * (restResult.Page - 1)).Take(restResult.PageSize);
             }
-            else
-            {
-                restResult.Data = selectedData;
-            }
+
+            restResult.Data = resultData;
 
             return restResult;
         }
