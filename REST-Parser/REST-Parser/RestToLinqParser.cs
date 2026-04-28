@@ -351,7 +351,7 @@ namespace REST_Parser
                 var totalCount = resultData.Count();
                 var pageCount = totalCount / restResult.PageSize;
                 if (pageCount * restResult.PageSize < totalCount) pageCount += 1;
-                if (restResult.Page > pageCount) restResult.Page = pageCount;
+                if (restResult.Page > pageCount) restResult.Page = pageCount == 0 ? 1 : pageCount;
                 restResult.PageCount = pageCount;
                 restResult.TotalCount = totalCount;
 

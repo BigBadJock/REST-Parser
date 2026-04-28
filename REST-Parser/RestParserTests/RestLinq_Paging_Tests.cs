@@ -89,6 +89,22 @@ namespace RestParserTests
             Assert.AreEqual(2, restResult.Page);
         }
 
+        [TestMethod]
+        public void Paging_Empty_Result_Keeps_Page_1()
+        {
+            // arrange
+            string rest = "id[eq]=999&$sort_by[asc]=surname&$page=1&$pageSize=3";
+
+            // act
+            RestResult<TestItem> restResult = parser.Run(this.data, rest);
+
+            // assert
+            Assert.AreEqual(0, restResult.Data.Count());
+            Assert.AreEqual(1, restResult.Page);
+            Assert.AreEqual(0, restResult.PageCount);
+            Assert.AreEqual(0, restResult.TotalCount);
+        }
+
 
     }
 }
