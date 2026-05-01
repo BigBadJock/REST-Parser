@@ -6,7 +6,7 @@
     <Authors>John McArthur</Authors>
     <Company>John McArthur</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.4.0</Version>  
+    <Version>1.4.0.0</Version>  
     <Description>A parser that takes a REST query and converts it to LINQ statments, and can run those statements against a data source.</Description>
     <Copyright>2026</Copyright>
     <PackageReleaseNotes>
@@ -33,6 +33,7 @@
     <RepositoryUrl>https://github.com/BigBadJock/REST-Parser</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>REST, LINQ</PackageTags>
+    <IncrementVersionOnBuild>1.4.0</IncrementVersionOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
