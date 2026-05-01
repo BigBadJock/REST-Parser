@@ -16,12 +16,12 @@ namespace REST_Parser.Models
         /// <summary>
         /// Gets or sets the list of filter expressions parsed from the REST query.
         /// </summary>
-        public List<Expression<Func<T, bool>>> Expressions { get; set; }
+        public List<Expression<Func<T, bool>>> Expressions { get; set; } = new List<Expression<Func<T, bool>>>();
 
         /// <summary>
         /// Gets or sets the list of sort operations parsed from the REST query.
         /// </summary>
-        public List<SortBy<T>> SortOrder { get; set; }
+        public List<SortBy<T>> SortOrder { get; set; } = new List<SortBy<T>>();
 
         /// <summary>
         /// Gets or sets the IQueryable data result after applying filters, sorting, and pagination.

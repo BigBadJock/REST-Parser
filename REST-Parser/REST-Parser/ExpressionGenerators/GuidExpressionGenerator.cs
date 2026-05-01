@@ -34,7 +34,7 @@ namespace REST_Parser.ExpressionGenerators
             }
             catch (Exception ex)
             {
-                throw new REST_InvalidFieldnameException($"field={field} value={value}", ex);
+                throw new REST_InvalidValueException($"{field}", value, ex);
             }
         }
 

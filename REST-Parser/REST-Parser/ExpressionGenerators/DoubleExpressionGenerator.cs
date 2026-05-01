@@ -2,6 +2,7 @@
 using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -15,7 +16,7 @@ namespace REST_Parser.ExpressionGenerators
         {
             try
             {
-                double v = double.Parse(value);
+                double v = double.Parse(value, CultureInfo.InvariantCulture);
                 Type paramType = Expression.PropertyOrField(parameter, field).Type;
                 MemberExpression member = Expression.PropertyOrField(parameter, field);
                 ConstantExpression constantExpression = Expression.Constant(v);

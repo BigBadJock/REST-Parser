@@ -24,13 +24,13 @@ namespace REST_Parser
         private const string ASC_ORDER = "ASC";
         private const string DESC_ORDER = "DESC";
 
-        private IStringExpressionGenerator<T> stringExpressionGenerator;
-        private IIntExpressionGenerator<T> intExpressionGenerator;
-        private IDateExpressionGenerator<T> dateExpressionGenerator;
-        private IDoubleExpressionGenerator<T> doubleExpressionGenerator;
-        private IDecimalExpressionGenerator<T> decimalExpressionGenerator;
-        private IBooleanExpressionGenerator<T> booleanExpressionGenerator;
-        private IGuidExpressionGenerator<T> guidExpressionGenerator;
+        private readonly IStringExpressionGenerator<T> stringExpressionGenerator;
+        private readonly IIntExpressionGenerator<T> intExpressionGenerator;
+        private readonly IDateExpressionGenerator<T> dateExpressionGenerator;
+        private readonly IDoubleExpressionGenerator<T> doubleExpressionGenerator;
+        private readonly IDecimalExpressionGenerator<T> decimalExpressionGenerator;
+        private readonly IBooleanExpressionGenerator<T> booleanExpressionGenerator;
+        private readonly IGuidExpressionGenerator<T> guidExpressionGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class.
@@ -217,11 +217,6 @@ namespace REST_Parser
                     paramType = Nullable.GetUnderlyingType(paramType);
                 }
 
-                if (Nullable.GetUnderlyingType(paramType) != null)
-                {
-                    paramType = Nullable.GetUnderlyingType(paramType);
-                }
-
             }
             catch (Exception ex)
             {
@@ -253,12 +248,10 @@ namespace REST_Parser
                     {
                         return this.guidExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     }
-                    break;
+                    throw new REST_InvalidFieldnameException(field);
                 default:
-                    break;
+                    throw new REST_InvalidFieldnameException(field);
             }
-
-            return null;
 
         }
 
@@ -275,7 +268,7 @@ namespace REST_Parser
         {
             ArgumentNullException.ThrowIfNull(condition);
 
-            string[] sides = condition.Split('=');
+            string[] sides = condition.Split('=', 2);
             if (sides.Length < 2)
             {
                 throw new ArgumentException($"Invalid condition format: {condition}");

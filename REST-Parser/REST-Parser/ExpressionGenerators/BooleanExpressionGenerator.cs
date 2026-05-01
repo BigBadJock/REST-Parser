@@ -44,7 +44,7 @@ namespace REST_Parser.ExpressionGenerators
                             throw new REST_InvalidOperatorException(field, restOperator);
                     }
                 }
-                throw new Exception();
+                throw new REST_InvalidValueException(field, value);
             }
             catch (REST_InvalidOperatorException)
             {

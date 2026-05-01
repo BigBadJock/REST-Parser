@@ -1,6 +1,7 @@
 ﻿using REST_Parser.Exceptions;
 using REST_Parser.ExpressionGenerators.Interfaces;
 using System;
+using System.Globalization;
 using System.Linq.Expressions;
 
 namespace REST_Parser.ExpressionGenerators
@@ -12,7 +13,7 @@ namespace REST_Parser.ExpressionGenerators
             try
             {
 
-                DateTime v = DateTime.Parse(value);
+                DateTime v = DateTime.Parse(value, CultureInfo.InvariantCulture);
                 Type paramType = Expression.PropertyOrField(parameter, field).Type;
                 MemberExpression member = Expression.PropertyOrField(parameter, field);
                 ConstantExpression constantExpression = Expression.Constant(v);

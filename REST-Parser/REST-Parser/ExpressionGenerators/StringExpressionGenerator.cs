@@ -46,6 +46,10 @@ namespace REST_Parser.ExpressionGenerators
             ConstantExpression constantExpression = Expression.Constant(value, paramType);
             UnaryExpression conversion = Expression.Convert(constantExpression, paramType);
             MethodInfo method = paramType.GetMethod("Contains", new[] { paramType });
+            if (method == null)
+            {
+                throw new REST_InvalidOperatorException(field, "contains");
+            }
             var containsMethodExp = Expression.Call(property, method, conversion);
             var nullCheck = Expression.NotEqual(property, Expression.Constant(null, typeof(object)));
             var combined = Expression.AndAlso(nullCheck, containsMethodExp);
