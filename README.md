@@ -155,10 +155,10 @@ Supported operators:
 | --- | --- | --- |
 | `eq` | Equal to | All supported types |
 | `ne` | Not equal to | All supported types |
-| `gt` | Greater than | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
-| `ge` | Greater than or equal to | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
-| `lt` | Less than | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
-| `le` | Less than or equal to | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
+| `gt` | Greater than | All supported types except `string`, `bool` and `Guid` |
+| `ge` | Greater than or equal to | All supported types except `string`, `bool` and `Guid` |
+| `lt` | Less than | All supported types except `string`, `bool` and `Guid` |
+| `le` | Less than or equal to | All supported types except `string`, `bool` and `Guid` |
 | `contains` | String contains | `string` |
 
 Supported CLR types:
@@ -171,8 +171,13 @@ Supported CLR types:
 - `DateTimeOffset` and `DateTimeOffset?`
 - `bool` and `bool?`
 - `Guid` and `Guid?`
+- `long`, `float`, `short`, `byte`, `sbyte`, `ushort`, `uint`, `ulong` (and nullable versions)
+- Enums (and nullable enums)
+- `DateOnly` and `DateOnly?`
+- `TimeOnly` and `TimeOnly?`
+- `TimeSpan` and `TimeSpan?`
 
-Filtering on a property of any other type (for example `long`, `float`, or an enum) throws `REST_InvalidFieldnameException`. Sorting works on any property type.
+Filtering on a property of any other type (for example `char` or a navigation property) throws `REST_InvalidFieldnameException`. Sorting works on any property type.
 
 String examples:
 
@@ -215,6 +220,26 @@ Boolean and GUID examples:
 isActive=true
 isDiscontinued[ne]=true
 productId[eq]=123e4567-e89b-12d3-a456-426614174000
+```
+
+Enum examples:
+
+```text
+status=Active
+status=active
+status=2
+status[gt]=Draft
+```
+
+Enum values can be member names (case-insensitive) or underlying numbers. `eq` and `ne` compare the enum directly. `gt`, `ge`, `lt` and `le` compare the underlying numeric values, so the result follows the order the members are declared in, not alphabetical order.
+
+`DateOnly`, `TimeOnly` and `TimeSpan` examples:
+
+```text
+startDate[ge]=2024-01-01
+opensAt[lt]=09:30
+duration[gt]=01:30:00
+duration[le]=1.00:00:00
 ```
 
 ## Sorting
@@ -369,6 +394,11 @@ services.AddSingleton<IDoubleExpressionGenerator<Product>, DoubleExpressionGener
 services.AddSingleton<IDecimalExpressionGenerator<Product>, DecimalExpressionGenerator<Product>>();
 services.AddSingleton<IBooleanExpressionGenerator<Product>, BooleanExpressionGenerator<Product>>();
 services.AddSingleton<IGuidExpressionGenerator<Product>, GuidExpressionGenerator<Product>>();
+services.AddSingleton<INumericExpressionGenerator<Product>, NumericExpressionGenerator<Product>>();
+services.AddSingleton<IEnumExpressionGenerator<Product>, EnumExpressionGenerator<Product>>();
+services.AddSingleton<IDateOnlyExpressionGenerator<Product>, DateOnlyExpressionGenerator<Product>>();
+services.AddSingleton<ITimeOnlyExpressionGenerator<Product>, TimeOnlyExpressionGenerator<Product>>();
+services.AddSingleton<ITimeSpanExpressionGenerator<Product>, TimeSpanExpressionGenerator<Product>>();
 services.AddSingleton<IRestToLinqParser<Product>, RestToLinqParser<Product>>();
 ```
 

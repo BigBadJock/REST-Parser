@@ -22,5 +22,24 @@ namespace RestParserTests
         public Guid GuidId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? ShippedAt { get; set; }
+        public long BigNumber { get; set; }
+        public long? NullableBigNumber { get; set; }
+        public float Weight { get; set; }
+        public short Quantity { get; set; }
+        public byte Level { get; set; }
+        public TestStatus Status { get; set; }
+        public TestStatus? NullableStatus { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly? EndDate { get; set; }
+        public TimeOnly OpensAt { get; set; }
+        public TimeSpan Duration { get; set; }
+        public TimeSpan? NullableDuration { get; set; }
+    }
+
+    internal enum TestStatus
+    {
+        Draft = 0,
+        Active = 1,
+        Archived = 2
     }
 }

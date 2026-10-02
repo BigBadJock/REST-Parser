@@ -21,6 +21,11 @@ namespace REST_Parser.DependencyResolution
             services.AddSingleton<IIntExpressionGenerator<T>, IntExpressionGenerator<T>>();
             services.AddSingleton<IStringExpressionGenerator<T>, StringExpressionGenerator<T>>();
             services.AddSingleton<IGuidExpressionGenerator<T>, GuidExpressionGenerator<T>>();
+            services.AddSingleton<INumericExpressionGenerator<T>, NumericExpressionGenerator<T>>();
+            services.AddSingleton<IEnumExpressionGenerator<T>, EnumExpressionGenerator<T>>();
+            services.AddSingleton<IDateOnlyExpressionGenerator<T>, DateOnlyExpressionGenerator<T>>();
+            services.AddSingleton<ITimeOnlyExpressionGenerator<T>, TimeOnlyExpressionGenerator<T>>();
+            services.AddSingleton<ITimeSpanExpressionGenerator<T>, TimeSpanExpressionGenerator<T>>();
             services.AddSingleton<IRestToLinqParser<T>, RestToLinqParser<T>>();
         }
     }

@@ -33,10 +33,15 @@ namespace REST_Parser
         private readonly IBooleanExpressionGenerator<T> booleanExpressionGenerator;
         private readonly IGuidExpressionGenerator<T> guidExpressionGenerator;
         private readonly IDateTimeOffsetExpressionGenerator<T> dateTimeOffsetExpressionGenerator;
+        private readonly INumericExpressionGenerator<T> numericExpressionGenerator;
+        private readonly IEnumExpressionGenerator<T> enumExpressionGenerator;
+        private readonly IDateOnlyExpressionGenerator<T> dateOnlyExpressionGenerator;
+        private readonly ITimeOnlyExpressionGenerator<T> timeOnlyExpressionGenerator;
+        private readonly ITimeSpanExpressionGenerator<T> timeSpanExpressionGenerator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class, using the default
-        /// <see cref="DateTimeOffsetExpressionGenerator{T}"/> for DateTimeOffset fields.
+        /// generators for DateTimeOffset, numeric (long, float, short, byte, ...), enum, DateOnly, TimeOnly and TimeSpan fields.
         /// </summary>
         /// <param name="stringExpressionGenerator">Generator for string field expressions.</param>
         /// <param name="intExpressionGenerator">Generator for integer field expressions.</param>
@@ -51,7 +56,8 @@ namespace REST_Parser
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class.
+        /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class, using the default
+        /// generators for numeric (long, float, short, byte, ...), enum, DateOnly, TimeOnly and TimeSpan fields.
         /// </summary>
         /// <param name="stringExpressionGenerator">Generator for string field expressions.</param>
         /// <param name="intExpressionGenerator">Generator for integer field expressions.</param>
@@ -62,7 +68,35 @@ namespace REST_Parser
         /// <param name="guidExpressionGenerator">Generator for Guid field expressions.</param>
         /// <param name="dateTimeOffsetExpressionGenerator">Generator for DateTimeOffset field expressions.</param>
         public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator, IGuidExpressionGenerator<T> guidExpressionGenerator, IDateTimeOffsetExpressionGenerator<T> dateTimeOffsetExpressionGenerator)
+            : this(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator, doubleExpressionGenerator, decimalExpressionGenerator, booleanExpressionGenerator, guidExpressionGenerator, dateTimeOffsetExpressionGenerator,
+                  new NumericExpressionGenerator<T>(), new EnumExpressionGenerator<T>(), new DateOnlyExpressionGenerator<T>(), new TimeOnlyExpressionGenerator<T>(), new TimeSpanExpressionGenerator<T>())
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class.
+        /// </summary>
+        /// <param name="stringExpressionGenerator">Generator for string field expressions.</param>
+        /// <param name="intExpressionGenerator">Generator for integer field expressions.</param>
+        /// <param name="dateExpressionGenerator">Generator for DateTime field expressions.</param>
+        /// <param name="doubleExpressionGenerator">Generator for double field expressions.</param>
+        /// <param name="decimalExpressionGenerator">Generator for decimal field expressions.</param>
+        /// <param name="booleanExpressionGenerator">Generator for boolean field expressions.</param>
+        /// <param name="guidExpressionGenerator">Generator for Guid field expressions.</param>
+        /// <param name="dateTimeOffsetExpressionGenerator">Generator for DateTimeOffset field expressions.</param>
+        /// <param name="numericExpressionGenerator">Generator for long, float, short, byte, sbyte, ushort, uint and ulong field expressions.</param>
+        /// <param name="enumExpressionGenerator">Generator for enum field expressions.</param>
+        /// <param name="dateOnlyExpressionGenerator">Generator for DateOnly field expressions.</param>
+        /// <param name="timeOnlyExpressionGenerator">Generator for TimeOnly field expressions.</param>
+        /// <param name="timeSpanExpressionGenerator">Generator for TimeSpan field expressions.</param>
+        public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator, IGuidExpressionGenerator<T> guidExpressionGenerator, IDateTimeOffsetExpressionGenerator<T> dateTimeOffsetExpressionGenerator,
+            INumericExpressionGenerator<T> numericExpressionGenerator, IEnumExpressionGenerator<T> enumExpressionGenerator, IDateOnlyExpressionGenerator<T> dateOnlyExpressionGenerator, ITimeOnlyExpressionGenerator<T> timeOnlyExpressionGenerator, ITimeSpanExpressionGenerator<T> timeSpanExpressionGenerator)
+        {
+            this.numericExpressionGenerator = numericExpressionGenerator;
+            this.enumExpressionGenerator = enumExpressionGenerator;
+            this.dateOnlyExpressionGenerator = dateOnlyExpressionGenerator;
+            this.timeOnlyExpressionGenerator = timeOnlyExpressionGenerator;
+            this.timeSpanExpressionGenerator = timeSpanExpressionGenerator;
             this.dateTimeOffsetExpressionGenerator = dateTimeOffsetExpressionGenerator;
             this.stringExpressionGenerator = stringExpressionGenerator;
             this.intExpressionGenerator = intExpressionGenerator;
@@ -249,6 +283,12 @@ namespace REST_Parser
                 restOperator = "eq";
             }
 
+            // enums report their underlying TypeCode (e.g. Int32), so they must be routed before the switch
+            if (paramType.IsEnum)
+            {
+                return this.enumExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+            }
+
             switch (Type.GetTypeCode(paramType))
             {
                 case TypeCode.String:
@@ -263,6 +303,15 @@ namespace REST_Parser
                     return this.decimalExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                 case TypeCode.Boolean:
                     return this.booleanExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                case TypeCode.Int64:
+                case TypeCode.Single:
+                case TypeCode.Int16:
+                case TypeCode.Byte:
+                case TypeCode.SByte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                    return this.numericExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                 case TypeCode.Object:
                     if (paramType == typeof(Guid))
                     {
@@ -271,6 +320,18 @@ namespace REST_Parser
                     if (paramType == typeof(DateTimeOffset))
                     {
                         return this.dateTimeOffsetExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                    }
+                    if (paramType == typeof(DateOnly))
+                    {
+                        return this.dateOnlyExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                    }
+                    if (paramType == typeof(TimeOnly))
+                    {
+                        return this.timeOnlyExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                    }
+                    if (paramType == typeof(TimeSpan))
+                    {
+                        return this.timeSpanExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     }
                     throw new REST_InvalidFieldnameException(field);
                 default:
