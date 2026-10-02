@@ -65,6 +65,7 @@ public class Product
     public decimal Price { get; set; }
     public int Stock { get; set; }
     public DateTime ReleaseDate { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
     public bool IsActive { get; set; }
     public string? Description { get; set; }
     public double? Rating { get; set; }
@@ -154,10 +155,10 @@ Supported operators:
 | --- | --- | --- |
 | `eq` | Equal to | All supported types |
 | `ne` | Not equal to | All supported types |
-| `gt` | Greater than | `int`, `double`, `decimal`, `DateTime` |
-| `ge` | Greater than or equal to | `int`, `double`, `decimal`, `DateTime` |
-| `lt` | Less than | `int`, `double`, `decimal`, `DateTime` |
-| `le` | Less than or equal to | `int`, `double`, `decimal`, `DateTime` |
+| `gt` | Greater than | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
+| `ge` | Greater than or equal to | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
+| `lt` | Less than | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
+| `le` | Less than or equal to | `int`, `double`, `decimal`, `DateTime`, `DateTimeOffset` |
 | `contains` | String contains | `string` |
 
 Supported CLR types:
@@ -167,10 +168,11 @@ Supported CLR types:
 - `double` and `double?`
 - `decimal` and `decimal?`
 - `DateTime` and `DateTime?`
+- `DateTimeOffset` and `DateTimeOffset?`
 - `bool` and `bool?`
 - `Guid` and `Guid?`
 
-Filtering on a property of any other type (for example `long`, `float`, `DateTimeOffset`, or an enum) throws `REST_InvalidFieldnameException`. Sorting works on any property type.
+Filtering on a property of any other type (for example `long`, `float`, or an enum) throws `REST_InvalidFieldnameException`. Sorting works on any property type.
 
 String examples:
 
@@ -196,6 +198,16 @@ Date examples:
 releaseDate[gt]=2023-01-01
 releaseDate[ge]=2023-01-01&releaseDate[le]=2023-12-31
 ```
+
+`DateTimeOffset` examples:
+
+```text
+updatedAt[ge]=2024-06-01T09:00:00Z
+updatedAt[lt]=2024-06-01T09:00:00-05:00
+updatedAt[gt]=2024-06-01
+```
+
+`DateTimeOffset` values are compared as points in time, so `10:00+02:00` equals `08:00Z`. A value without an offset (such as `2024-06-01`) is treated as UTC. In a URL, `+` decodes to a space, so send positive offsets as `%2B` (`2024-06-01T09:00:00%2B02:00`) or use UTC with `Z`.
 
 Boolean and GUID examples:
 
@@ -352,6 +364,7 @@ The `RegisterRestParser<T>()` extension is the preferred setup. If needed, you c
 services.AddSingleton<IStringExpressionGenerator<Product>, StringExpressionGenerator<Product>>();
 services.AddSingleton<IIntExpressionGenerator<Product>, IntExpressionGenerator<Product>>();
 services.AddSingleton<IDateExpressionGenerator<Product>, DateExpressionGenerator<Product>>();
+services.AddSingleton<IDateTimeOffsetExpressionGenerator<Product>, DateTimeOffsetExpressionGenerator<Product>>();
 services.AddSingleton<IDoubleExpressionGenerator<Product>, DoubleExpressionGenerator<Product>>();
 services.AddSingleton<IDecimalExpressionGenerator<Product>, DecimalExpressionGenerator<Product>>();
 services.AddSingleton<IBooleanExpressionGenerator<Product>, BooleanExpressionGenerator<Product>>();

@@ -15,6 +15,7 @@ namespace REST_Parser.DependencyResolution
         {
             services.AddSingleton<IBooleanExpressionGenerator<T>, BooleanExpressionGenerator<T>>();
             services.AddSingleton<IDateExpressionGenerator<T>, DateExpressionGenerator<T>>();
+            services.AddSingleton<IDateTimeOffsetExpressionGenerator<T>, DateTimeOffsetExpressionGenerator<T>>();
             services.AddSingleton<IDecimalExpressionGenerator<T>, DecimalExpressionGenerator<T>>();
             services.AddSingleton<IDoubleExpressionGenerator<T>, DoubleExpressionGenerator<T>>();
             services.AddSingleton<IIntExpressionGenerator<T>, IntExpressionGenerator<T>>();

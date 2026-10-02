@@ -20,5 +20,7 @@ namespace RestParserTests
         public double? Delivered { get; set; }
         public DateTime? MarriageDate { get; set; }
         public Guid GuidId { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset? ShippedAt { get; set; }
     }
 }

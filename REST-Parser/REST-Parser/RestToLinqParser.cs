@@ -1,4 +1,5 @@
 ﻿using REST_Parser.Exceptions;
+using REST_Parser.ExpressionGenerators;
 using REST_Parser.ExpressionGenerators.Interfaces;
 using REST_Parser.Models;
 using System;
@@ -31,6 +32,23 @@ namespace REST_Parser
         private readonly IDecimalExpressionGenerator<T> decimalExpressionGenerator;
         private readonly IBooleanExpressionGenerator<T> booleanExpressionGenerator;
         private readonly IGuidExpressionGenerator<T> guidExpressionGenerator;
+        private readonly IDateTimeOffsetExpressionGenerator<T> dateTimeOffsetExpressionGenerator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class, using the default
+        /// <see cref="DateTimeOffsetExpressionGenerator{T}"/> for DateTimeOffset fields.
+        /// </summary>
+        /// <param name="stringExpressionGenerator">Generator for string field expressions.</param>
+        /// <param name="intExpressionGenerator">Generator for integer field expressions.</param>
+        /// <param name="dateExpressionGenerator">Generator for DateTime field expressions.</param>
+        /// <param name="doubleExpressionGenerator">Generator for double field expressions.</param>
+        /// <param name="decimalExpressionGenerator">Generator for decimal field expressions.</param>
+        /// <param name="booleanExpressionGenerator">Generator for boolean field expressions.</param>
+        /// <param name="guidExpressionGenerator">Generator for Guid field expressions.</param>
+        public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator, IGuidExpressionGenerator<T> guidExpressionGenerator)
+            : this(stringExpressionGenerator, intExpressionGenerator, dateExpressionGenerator, doubleExpressionGenerator, decimalExpressionGenerator, booleanExpressionGenerator, guidExpressionGenerator, new DateTimeOffsetExpressionGenerator<T>())
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RestToLinqParser{T}"/> class.
@@ -42,8 +60,10 @@ namespace REST_Parser
         /// <param name="decimalExpressionGenerator">Generator for decimal field expressions.</param>
         /// <param name="booleanExpressionGenerator">Generator for boolean field expressions.</param>
         /// <param name="guidExpressionGenerator">Generator for Guid field expressions.</param>
-        public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator, IGuidExpressionGenerator<T> guidExpressionGenerator)
+        /// <param name="dateTimeOffsetExpressionGenerator">Generator for DateTimeOffset field expressions.</param>
+        public RestToLinqParser(IStringExpressionGenerator<T> stringExpressionGenerator, IIntExpressionGenerator<T> intExpressionGenerator, IDateExpressionGenerator<T> dateExpressionGenerator, IDoubleExpressionGenerator<T> doubleExpressionGenerator, IDecimalExpressionGenerator<T> decimalExpressionGenerator, IBooleanExpressionGenerator<T> booleanExpressionGenerator, IGuidExpressionGenerator<T> guidExpressionGenerator, IDateTimeOffsetExpressionGenerator<T> dateTimeOffsetExpressionGenerator)
         {
+            this.dateTimeOffsetExpressionGenerator = dateTimeOffsetExpressionGenerator;
             this.stringExpressionGenerator = stringExpressionGenerator;
             this.intExpressionGenerator = intExpressionGenerator;
             this.dateExpressionGenerator = dateExpressionGenerator;
@@ -247,6 +267,10 @@ namespace REST_Parser
                     if (paramType == typeof(Guid))
                     {
                         return this.guidExpressionGenerator.GetExpression(restOperator, parameter, field, value);
+                    }
+                    if (paramType == typeof(DateTimeOffset))
+                    {
+                        return this.dateTimeOffsetExpressionGenerator.GetExpression(restOperator, parameter, field, value);
                     }
                     throw new REST_InvalidFieldnameException(field);
                 default:
