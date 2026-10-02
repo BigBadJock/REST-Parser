@@ -12,7 +12,7 @@ namespace REST_Parser
         /// <summary>
         /// Parses a REST query string into expression and sort components without executing against a data source.
         /// </summary>
-        /// <param name="request">The REST query string (e.g., "name=John&amp;age[gt]=25&amp;$sort_by=name[ASC]&amp;$page=1&amp;$pagesize=10").</param>
+        /// <param name="request">The REST query string (e.g., "name=John&amp;age[gt]=25&amp;$sort_by[asc]=name&amp;$page=1&amp;$pagesize=10").</param>
         /// <returns>A <see cref="RestResult{T}"/> containing parsed expressions, sort orders, and pagination settings.</returns>
         /// <exception cref="System.ArgumentException">Thrown when the query exceeds maximum length or condition count.</exception>
         /// <exception cref="REST_InvalidFieldnameException">Thrown when a field name in the query doesn't exist on the entity type.</exception>
@@ -24,7 +24,7 @@ namespace REST_Parser
         /// Parses a REST query string and executes it against an IQueryable data source.
         /// </summary>
         /// <param name="source">The IQueryable data source to query (e.g., DbContext.Products).</param>
-        /// <param name="rest">The REST query string (e.g., "name=John&amp;age[gt]=25&amp;$sort_by=name[ASC]&amp;$page=1&amp;$pagesize=10").</param>
+        /// <param name="rest">The REST query string (e.g., "name=John&amp;age[gt]=25&amp;$sort_by[asc]=name&amp;$page=1&amp;$pagesize=10").</param>
         /// <returns>A <see cref="RestResult{T}"/> containing the filtered, sorted, and paginated data along with metadata.</returns>
         /// <exception cref="System.ArgumentException">Thrown when the query exceeds maximum length or condition count.</exception>
         /// <exception cref="REST_InvalidFieldnameException">Thrown when a field name in the query doesn't exist on the entity type.</exception>

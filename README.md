@@ -26,8 +26,10 @@ REST-Parser converts REST-style query strings into LINQ expressions and can run 
 - [API Usage](#api-usage)
 - [Exception Handling](#exception-handling)
 - [Limits and Behavior](#limits-and-behavior)
+- [Best Practices](#best-practices)
 - [Troubleshooting](#troubleshooting)
 - [Version History](#version-history)
+- [Project Layout](#project-layout)
 
 ## Installation
 
@@ -136,7 +138,13 @@ Special parameters:
 | `$page` | One-based page number | `$page=2` |
 | `$pagesize` | Items per page | `$pagesize=25` |
 
-Parameter names for `$sort_by`, `$page`, and `$pagesize` are matched case-insensitively. Some HTTP clients encode brackets and dollar signs automatically; for example, `$sort_by%5Bdesc%5D=price` is equivalent once decoded by ASP.NET Core.
+Case sensitivity:
+
+- Field names are matched case-insensitively against public properties of `T` (`price`, `Price` and `PRICE` all work).
+- `$sort_by`, `$page`, and `$pagesize` are matched case-insensitively, and so is the `asc`/`desc` direction.
+- Filter operators are case-sensitive and must be lowercase: `price[gt]=10` works, `price[GT]=10` throws `REST_InvalidOperatorException`.
+
+The parser does not URL-decode its input. Some HTTP clients encode brackets, dollar signs, and spaces (for example `$sort_by%5Bdesc%5D=price`), so decode the query string before passing it to the parser. See [ASP.NET Core Controller](#aspnet-core-controller).
 
 ## Filtering
 
@@ -161,6 +169,8 @@ Supported CLR types:
 - `DateTime` and `DateTime?`
 - `bool` and `bool?`
 - `Guid` and `Guid?`
+
+Filtering on a property of any other type (for example `long`, `float`, `DateTimeOffset`, or an enum) throws `REST_InvalidFieldnameException`. Sorting works on any property type.
 
 String examples:
 
@@ -211,7 +221,7 @@ Multiple sort clauses are applied in order:
 category=Electronics&$sort_by[asc]=brand&$sort_by[desc]=price
 ```
 
-If no sort is supplied and the entity has an `Id` property, REST-Parser sorts by `Id` ascending. If the entity has no `Id` property, no default sort is added.
+If no sort is supplied and the entity has an `Id` property (matched case-insensitively, so `ID` or `id` also count), REST-Parser sorts by it ascending. If the entity has no such property, no default sort is added. The default sort is included in `SortOrder` returned by `Parse()`, too.
 
 ## Pagination
 
@@ -246,9 +256,10 @@ Behavior:
 
 ### ASP.NET Core Controller
 
-To support direct query strings such as `/api/products?category=Electronics&price[lt]=1000`, pass the raw request query string to the parser:
+To support direct query strings such as `/api/products?category=Electronics&price[lt]=1000`, pass the request query string to the parser. `Request.QueryString.Value` is still URL-encoded, so decode it first:
 
 ```csharp
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using REST_Parser;
@@ -270,7 +281,7 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
-        string query = Request.QueryString.Value?.TrimStart('?') ?? "";
+        string query = WebUtility.UrlDecode(Request.QueryString.Value?.TrimStart('?') ?? "");
         RestResult<Product> result = parser.Run(context.Products.AsNoTracking(), query);
 
         return Ok(new
@@ -315,11 +326,13 @@ IQueryable<Product> query = context.Products
     .Where(p => p.IsActive)
     .Where(p => p.TenantId == tenantId);
 
-foreach (var expression in parsed.Expressions)
+foreach (var expression in parsed.Expressions.Where(e => e != null))
 {
     query = query.Where(expression);
 }
 ```
+
+`Expressions` can contain `null` entries when the query has empty parts (for example a trailing `&`), so skip them as shown. `Run()` does this for you.
 
 Use `Run()` when you want REST-Parser to apply filters, sorting, and pagination in one call:
 
@@ -380,10 +393,10 @@ Common causes:
 
 | Exception | Typical cause | Example |
 | --- | --- | --- |
-| `REST_InvalidFieldnameException` | Field does not exist on the entity | `unknownField=value` |
-| `REST_InvalidOperatorException` | Operator is not supported for that field type | `name[gt]=test` |
-| `REST_InvalidValueException` | Value cannot be converted to the field type | `price=abc` |
-| `ArgumentException` | Query format or security limit failure | Too many conditions |
+| `REST_InvalidFieldnameException` | Field does not exist on the entity, or its type can't be filtered | `unknownField=value` |
+| `REST_InvalidOperatorException` | Operator is unknown, not lowercase, or not supported for that field type | `name[gt]=test` |
+| `REST_InvalidValueException` | Value cannot be converted to the field type, or `$page`/`$pagesize` is not a positive integer | `price=abc`, `$page=0` |
+| `ArgumentException` | Query too long, too many parts, or a part with no `=` | `name` |
 
 ## Limits and Behavior
 
@@ -399,7 +412,9 @@ Other behavior to be aware of:
 
 - String equality and `contains` use the underlying .NET string comparison behavior and are case-sensitive for in-memory queries.
 - `contains` is only available for `string` fields.
-- Complex query grouping, nested expressions, and `OR` conditions are not supported.
+- All filters are combined with AND. Complex query grouping, nested expressions, and `OR` conditions are not supported.
+- Values may contain `=` (only the first `=` separates field and value) but cannot contain `&`, since `&` separates query parts.
+- Any part containing `$sort_by` or `$page` anywhere (including in its value) is treated as a sort or paging parameter, not a filter. Unrecognised `$page...` parameters are ignored.
 - Numeric and date parsing uses invariant culture.
 - `Run()` keeps the result as `IQueryable<T>`, so database-backed providers such as EF Core can translate the generated query where supported.
 
@@ -420,7 +435,7 @@ IQueryable<Product> products = context.Products
     .Where(p => p.TenantId == tenantId)
     .Where(p => p.IsActive);
 
-foreach (var expression in parsed.Expressions)
+foreach (var expression in parsed.Expressions.Where(e => e != null))
 {
     products = products.Where(expression);
 }
@@ -486,6 +501,14 @@ See [GitHub releases](https://github.com/BigBadJock/REST-Parser/releases) for mo
 - [GitHub repository](https://github.com/BigBadJock/REST-Parser)
 - [Report issues](https://github.com/BigBadJock/REST-Parser/issues)
 
+## Project Layout
+
+| Path | Contents |
+| --- | --- |
+| `REST-Parser/REST-Parser` | The library: `RestToLinqParser<T>`, per-type expression generators, exceptions, DI extension |
+| `REST-Parser/RestParserTests` | MSTest unit tests |
+| `REST-Parser/RestParserHost` | Placeholder console app |
+
 ## License
 
-Copyright (c) 2026 John McArthur.
+MIT. Copyright (c) 2026 John McArthur. See [LICENSE](https://github.com/BigBadJock/REST-Parser/blob/main/LICENSE).
