@@ -7,7 +7,9 @@ REST-Parser converts REST-style query strings into LINQ expressions and can run 
 
 ## Features
 
-- Dynamic filtering with equality, comparison, and string `contains` operators
+- Dynamic filtering with equality, comparison, `in`, and string `contains` operators
+- OR conditions with `|`, alongside AND with `&`
+- Filtering on strings, all numeric types, `bool`, `Guid`, enums, `DateTime`, `DateTimeOffset`, `DateOnly`, `TimeOnly` and `TimeSpan`
 - Multi-column sorting with ascending and descending directions
 - Optional page-based pagination with result metadata
 - Strongly typed LINQ expression generation
@@ -48,7 +50,7 @@ Install-Package REST-Parser
 Package reference:
 
 ```xml
-<PackageReference Include="REST-Parser" Version="1.4.0" />
+<PackageReference Include="REST-Parser" Version="2.0.0" />
 ```
 
 ## Quick Start
@@ -67,8 +69,16 @@ public class Product
     public DateTime ReleaseDate { get; set; }
     public DateTimeOffset UpdatedAt { get; set; }
     public bool IsActive { get; set; }
+    public ProductStatus Status { get; set; }
     public string? Description { get; set; }
     public double? Rating { get; set; }
+}
+
+public enum ProductStatus
+{
+    Draft,
+    Active,
+    Discontinued
 }
 ```
 
@@ -107,7 +117,7 @@ public class ProductService
 Example query:
 
 ```http
-GET /api/products?category=Electronics&price[lt]=1000&$sort_by[asc]=price&$page=1&$pagesize=20
+GET /api/products?category=Electronics&price[lt]=1000&status[in]=Active,Draft&$sort_by[asc]=price&$page=1&$pagesize=20
 ```
 
 ## Query Syntax
@@ -130,6 +140,22 @@ Combine query parts with `&`:
 ```text
 category=Electronics&price[lt]=1000&isActive=true
 ```
+
+Use `|` within a part to match any of several conditions (OR). `&` binds more loosely than `|`, so each `&` part is one group of alternatives:
+
+```text
+status=Active|status=Pending&price[lt]=100
+```
+
+This means `(status == Active || status == Pending) && price < 100`. The alternatives can be on different fields (`name[contains]=phone|category=Mobile`). Parentheses and nested grouping are not supported. Sort and paging parameters cannot be part of an OR group.
+
+For several values of the same field, `[in]` is shorter:
+
+```text
+status[in]=Active,Pending
+```
+
+This is the same as `status=Active|status=Pending`.
 
 Special parameters:
 
@@ -160,6 +186,7 @@ Supported operators:
 | `lt` | Less than | All supported types except `string`, `bool` and `Guid` |
 | `le` | Less than or equal to | All supported types except `string`, `bool` and `Guid` |
 | `contains` | String contains | `string` |
+| `in` | Equal to any value in a comma-separated list | All supported types |
 
 Supported CLR types:
 
@@ -439,7 +466,7 @@ Common causes:
 | `REST_InvalidFieldnameException` | Field does not exist on the entity, or its type can't be filtered | `unknownField=value` |
 | `REST_InvalidOperatorException` | Operator is unknown, not lowercase, or not supported for that field type | `name[gt]=test` |
 | `REST_InvalidValueException` | Value cannot be converted to the field type, or `$page`/`$pagesize` is not a positive integer | `price=abc`, `$page=0` |
-| `ArgumentException` | Query too long, too many parts, or a part with no `=` | `name` |
+| `ArgumentException` | Query too long, too many conditions, a part with no `=`, or an empty or sort/paging `\|` alternative | `name`, `name=a\|` |
 
 ## Limits and Behavior
 
@@ -448,15 +475,16 @@ Built-in limits:
 | Limit | Value |
 | --- | --- |
 | Maximum query length | `2000` characters |
-| Maximum query parts | `50` parts separated by `&` |
+| Maximum conditions | `50`, counting each `&` part, each `\|` alternative and each `[in]` value |
 | Maximum page size | `1000` |
 
 Other behavior to be aware of:
 
 - String equality and `contains` use the underlying .NET string comparison behavior and are case-sensitive for in-memory queries.
 - `contains` is only available for `string` fields.
-- All filters are combined with AND. Complex query grouping, nested expressions, and `OR` conditions are not supported.
-- Values may contain `=` (only the first `=` separates field and value) but cannot contain `&`, since `&` separates query parts.
+- `&` parts are combined with AND, and `|` alternatives within a part with OR. Parentheses and nested grouping are not supported.
+- Values may contain `=` (only the first `=` separates field and value) but cannot contain `&` or `|`, since those separate conditions. `[in]` values cannot contain `,`.
+- Clients should URL-encode `|` as `%7C`. As with brackets, decode the query string before passing it to the parser.
 - Any part containing `$sort_by` or `$page` anywhere (including in its value) is treated as a sort or paging parameter, not a filter. Unrecognised `$page...` parameters are ignored.
 - Numeric and date parsing uses invariant culture.
 - `Run()` keeps the result as `IQueryable<T>`, so database-backed providers such as EF Core can translate the generated query where supported.
@@ -509,6 +537,12 @@ releaseDate=2023-01-01
 isActive=true
 ```
 
+### OR or `[in]` returns unexpected results
+
+`|` always separates alternatives and `,` always separates `[in]` values, so a value containing either character is split. For example, `name=Black|Decker` is read as two alternatives, `name=Black` and `Decker`, and throws `ArgumentException` because `Decker` has no `=`. Filter on a different field, or use `contains` with part of the value.
+
+Remember that `&` binds more loosely than `|`: `a=1|b=2&c=3` means `(a == 1 || b == 2) && c == 3`.
+
 ### No pagination metadata
 
 `Page`, `PageSize`, `TotalCount`, and `PageCount` are populated by `Run()` when pagination is requested. Add `$page` or `$pagesize` if the endpoint needs those values.
@@ -529,6 +563,7 @@ Console.WriteLine($"Base count: {context.Products.Count()}");
 
 Recent updates:
 
+- `2.0.0` - Filtering on `DateTimeOffset`, `long`, `float`, `short`, `byte`, `sbyte`, `ushort`, `uint`, `ulong`, enums, `DateOnly`, `TimeOnly` and `TimeSpan`. OR conditions with `|` and the `[in]` operator. A filter part with no `=` now throws `ArgumentException` (as documented) instead of `REST_InvalidFieldnameException`, and values can no longer contain `|`.
 - `1.4.0` - Bug fixes for value splitting on `=`, nullable handling, culture-invariant parsing, exception accuracy, null-safe collection initialization, and unsupported type detection.
 - `1.3.0` - Upgrade to .NET 10 with code improvements and optimizations.
 - `1.2.4` - Package updates.

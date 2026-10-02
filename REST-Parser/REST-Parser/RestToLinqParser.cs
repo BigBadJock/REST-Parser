@@ -24,6 +24,9 @@ namespace REST_Parser
         private const string PAGESIZE_PARAM = "$PAGESIZE";
         private const string ASC_ORDER = "ASC";
         private const string DESC_ORDER = "DESC";
+        private const char OR_SEPARATOR = '|';
+        private const char IN_SEPARATOR = ',';
+        private const string IN_OPERATOR = "in";
 
         private readonly IStringExpressionGenerator<T> stringExpressionGenerator;
         private readonly IIntExpressionGenerator<T> intExpressionGenerator;
@@ -127,9 +130,15 @@ namespace REST_Parser
                     throw new ArgumentException($"Query exceeds maximum of {MAX_CONDITIONS} conditions");
                 }
 
+                // OR alternatives and [in] values each count towards MAX_CONDITIONS
+                int comparisonCount = 0;
                 foreach (string condition in conditions)
                 {
-                    if (IsSortCondition(condition))
+                    if (condition.Contains(OR_SEPARATOR))
+                    {
+                        linqConditions.Add(ParseOrCondition(condition, ref comparisonCount));
+                    }
+                    else if (IsSortCondition(condition))
                     {
                         sortOrder.Add(ParseSortCondition(condition));
                     }
@@ -137,9 +146,11 @@ namespace REST_Parser
                     {
                         result = ParsePageCondition(result, condition);
                     }
-                    else
+                    else if (!string.IsNullOrWhiteSpace(condition))
                     {
-                        linqConditions.Add(ParseCondition(condition));
+                        ParameterExpression parameter = Expression.Parameter(typeof(T), "p");
+                        Expression body = ParseCondition(condition, parameter, ref comparisonCount);
+                        linqConditions.Add(Expression.Lambda<Func<T, bool>>(body, parameter));
                     }
                 }
 
@@ -252,18 +263,66 @@ namespace REST_Parser
             return conditions;
         }
 
-        private Expression<Func<T, bool>> ParseCondition(string condition)
+        /// <summary>
+        /// Parses a condition such as <c>status=Active|price[lt]=10</c> into a single expression that matches
+        /// when any of the alternatives match.
+        /// </summary>
+        private Expression<Func<T, bool>> ParseOrCondition(string condition, ref int comparisonCount)
         {
-            if (string.IsNullOrWhiteSpace(condition)) return null;
-            string field = string.Empty;
-            string value = string.Empty;
-            string restOperator = string.Empty;
-            ParameterExpression parameter;
+            ParameterExpression parameter = Expression.Parameter(typeof(T), "p");
+            Expression body = null;
+            foreach (string alternative in condition.Split(OR_SEPARATOR))
+            {
+                if (string.IsNullOrWhiteSpace(alternative) || IsSortCondition(alternative) || IsPageCondition(alternative))
+                {
+                    throw new ArgumentException($"Invalid OR condition: {condition}");
+                }
+
+                Expression alternativeBody = ParseCondition(alternative, parameter, ref comparisonCount);
+                body = body == null ? alternativeBody : Expression.OrElse(body, alternativeBody);
+            }
+            return Expression.Lambda<Func<T, bool>>(body, parameter);
+        }
+
+        /// <summary>
+        /// Parses a single condition into a boolean expression over <paramref name="parameter"/>, so that
+        /// several conditions can be combined into one lambda.
+        /// </summary>
+        private Expression ParseCondition(string condition, ParameterExpression parameter, ref int comparisonCount)
+        {
+            GetCondition(condition, out string field, out string restOperator, out string value);
+
+            if (restOperator != IN_OPERATOR)
+            {
+                CountComparison(ref comparisonCount);
+                return GetExpression(parameter, field, restOperator, value).Body;
+            }
+
+            // field[in]=a,b,c is shorthand for field=a|field=b|field=c
+            Expression body = null;
+            foreach (string item in value.Split(IN_SEPARATOR))
+            {
+                CountComparison(ref comparisonCount);
+                Expression itemBody = GetExpression(parameter, field, "eq", item.Trim()).Body;
+                body = body == null ? itemBody : Expression.OrElse(body, itemBody);
+            }
+            return body;
+        }
+
+        private static void CountComparison(ref int comparisonCount)
+        {
+            comparisonCount++;
+            if (comparisonCount > MAX_CONDITIONS)
+            {
+                throw new ArgumentException($"Query exceeds maximum of {MAX_CONDITIONS} conditions");
+            }
+        }
+
+        private Expression<Func<T, bool>> GetExpression(ParameterExpression parameter, string field, string restOperator, string value)
+        {
             Type paramType;
             try
             {
-                parameter = Expression.Parameter(typeof(T), "p");
-                GetCondition(condition, out field, out restOperator, out value);
                 paramType = Expression.PropertyOrField(parameter, field).Type;
 
                 if (paramType.IsGenericType && paramType.GetGenericTypeDefinition() == typeof(Nullable<>))
